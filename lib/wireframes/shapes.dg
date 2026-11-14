@@ -1,0 +1,70 @@
+# shapes: figures drawn with a few lines of `shape`. import shapes
+#
+#   db ID ["text"] [w= h= bands=N fill= stroke=]     cylinder (a database); bands=N makes a stack of discs; the text goes inside
+#   stack ID ["text"] [n=3 off=6 up fill=]           a box with copies behind it ("several of these"); `up`: the copies go up and to the right
+#   chip ID [w=64 h= rail fill=]                     a processor / server chip with its pins; `rail` draws a line through it
+#   chevrons ID [n=5 w=70 h=36 fill=]                the pipe of an event log (>>>>)
+#
+# All of them take the common options of an element (dx= dy= caption= aligny= self= ...), and `a -> id.top` works as with any element.
+
+def db label w="" h="" bands="1" fill="dark" stroke="#0a3556"
+  shape $id (
+      "$label" w=$w h=$h minw=60 minh=max(54,$bands*16+22) padx=14 pady=21
+      fill=$fill ty=ry+(h-2*ry)/2+ry*0.3
+  )
+    set ry=min(14,max(6,w*0.15))
+    set step=(h-2*ry)/$bands
+    repeat n=$bands var=k
+      set yt=($bands-1-$k)*step+ry
+      set yb=yt+step
+      path (
+          d="M0,yt L0,yb A w/2,ry 0 0 0 w,yb L w,yt Z" fill=self
+          stroke="$stroke" sw=1.6
+      )
+    ellipse cy=ry rx=w/2 ry=ry fill=lid stroke="$stroke" sw=1.6
+
+def stack label n="3" off="6" up fill="light"
+  shape $id (
+      "$label" stretch fill=$fill padx=14 pady=9 tx=(w-mx)/2 ty=oy+(h-my)/2
+  )
+    set mx=($n-1)*$off
+    set my=($n-1)*$off
+    set bw=w-mx
+    set bh=h-my
+    if up
+      set oy=my
+      repeat n=$n var=j
+        rect x=($n-1-$j)*$off y=$j*$off w=bw h=bh r=8 fill=self
+    if not up
+      set oy=0
+      repeat n=$n var=j
+        rect x=($n-1-$j)*$off y=($n-1-$j)*$off w=bw h=bh r=8 fill=self
+
+def chip w="64" h="" rail fill="white"
+  shape $id w=$w h=$h fill=$fill
+    set p=8
+    set bw=w-2*p
+    set bh=h-2*p
+    set c=min(bw,bh)*0.2
+    repeat n=5 var=k
+      set fx=p+bw*($k+0.5)/5
+      set fy=p+bh*($k+0.5)/5
+      path d="M fx,0 V p M fx,h V p+bh M 0,fy H p M w,fy H p+bw" sw=4
+    poly (
+        pts="p+c,p p+bw-c,p p+bw,p+c p+bw,p+bh-c p+bw-c,p+bh p+c,p+bh " &
+            "p,p+bh-c p,p+c"
+        fill=self sw=3
+    )
+    if rail
+      line x1=-6 x2=w+6 y1=h/2 y2=h/2 sw=2
+
+def chevrons n="5" w="70" h="36" fill="light"
+  shape $id w=$w h=$h fill=$fill
+    set step=w/($n+1)
+    repeat n=$n var=i
+      set x0=$i*step
+      poly (
+          pts="x0,0 x0+step*0.9,h/2 x0,h x0+step*0.45,h " &
+              "x0+step*1.35,h/2 x0+step*0.45,0"
+          fill=self sw=1.6 join=round
+      )

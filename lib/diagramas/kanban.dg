@@ -1,0 +1,21 @@
+# kanban: a board of lanes with cards. import kanban (it brings ui).
+#
+#   board [gap=16]                      a row of lanes
+#     lane "Title" [w=200]              a lane (cards go inside)
+#       card "Text" [tag="x" c=primary|warning|success]
+import ui
+
+def board gap="16"
+  row $id gap=$gap align=start
+    content
+
+def lane title w="200"
+  box $id w=$w fill=canvas stroke=border-soft radius=10 pad=10 gap=8 align=fill valign=start
+    text "$title" bold left
+    content
+
+def card text tag="" c="primary"
+  box $id fill=surface stroke=border-soft radius=6 padx=10 pady=8 gap=6 align=fill
+    text "$text" left
+    if tag
+      badge "$tag" $c

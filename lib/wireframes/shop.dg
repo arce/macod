@@ -1,0 +1,42 @@
+import flow
+def item title sub thumb="▣" price remove
+  card
+    row weights=0,4,1,0
+      thumb "$thumb" size=36
+      column gap=2
+        if title
+          text "$title" bold grow h=14
+        if sub
+          text "$sub" size=9 color=muted grow h=13
+        if not title
+          lines 2
+      if price
+        if price is 1
+          lines 1
+        if price is not 1
+          text "$price" bold right grow h=14
+      if remove
+        link "remove"
+
+def amount label value bold
+  row weights=4,1
+    if bold
+      text "$label" bold right grow h=14
+      if value
+        text "$value" bold right grow h=14
+      if not value
+        lines 1
+    if not bold
+      text "$label" right grow h=14
+      if value
+        text "$value" right grow h=14
+      if not value
+        lines 1
+
+def product name price
+  card
+    image h=80
+    text "$name" bold grow h=14
+    text "$price" grow h=14
+    content
+

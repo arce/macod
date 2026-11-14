@@ -1,0 +1,15 @@
+# er: entity-relationship diagrams over `graph node=entity`. import er
+#
+#   graph node=entity
+#     Cliente "Cliente" keys="id\nnombre"
+#     Cliente -> tip=none "1..*" Pedido "Pedido" keys="id\nfecha"
+#   an entity has a title and a list of attributes (keys="a\nb").
+import styles
+
+def entity title keys="" w=""
+  col $id gap=0 align=stretch w=$w
+    box light radius=0 sw=1.6 padx=14 pady=7 align=center
+      text "$title" bold
+    if keys
+      box white radius=0 sw=1.6 padx=10 pady=7 align=start
+        text "$keys" left

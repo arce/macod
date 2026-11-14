@@ -1,0 +1,17 @@
+# packet: fields whose width is proportional to their bits. import packet
+#
+#   packet
+#     bits                              (a row of fields; 32 bits = 384 pt)
+#       field "Source port" 16
+import styles
+
+def packet
+  col $id gap=0 align=start
+    content
+
+def bits
+  row gap=0 align=start
+    content
+
+def field label n="8" fill="white"
+  box "$label" w=($n)*12 h=34 radius=0 sw=1.6 fill=$fill size=10

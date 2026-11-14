@@ -1,0 +1,349 @@
+style ui
+  canvas metric=fixed margin=24 fill=surface stroke=border-soft
+  row gap=8
+  col gap=8
+  text size=10 h=14 base=0.42 left
+  callout size=10 padx=9 pady=6
+
+data tones name fill stroke
+  plain, surface, border-soft
+  gray, canvas, border-soft
+  white, surface, border-soft
+  blue, primary-soft, primary-border
+  orange, warning-soft, warning
+  green, success-soft, success
+
+data bars pct
+  100
+  80
+  90
+  60
+
+def screen title w phone
+  if phone
+    box $id (
+        fill=surface stroke=border sw=2.5 radius=28 w=300 pad=0 gap=0
+        valign=start align=fill
+    )
+      shape grow h=54
+        rect x=w/2-20 y=10 w=40 h=5 r=2.5 fill=border-soft sw=0
+        label "$title" x=w/2 y=40 bold size=10.5 base=0.4
+        line x1=10 y1=54 x2=w-10 y2=54 stroke=border-soft sw=1
+      col padx=24 pady=12 gap=8 align=fill
+        content
+      shape grow h=22
+        rect x=w/2-36 y=8 w=72 h=4 r=2 fill=border sw=0
+  if not phone
+    box $id (
+        fill=surface stroke=border sw=1.5 radius=6 pad=0 gap=0 w=$w
+        valign=start align=fill
+    )
+      shape "$title" grow h=24 size=9.5 color=muted base=0.42
+        path (
+            d="M 0 24 L 0 6 Q 0 0 6 0 L w-6 0 Q w 0 w 6 L w 24 Z" fill=bar
+            stroke=border sw=1.5
+        )
+      col padx=14 pady=12 gap=8 align=fill
+        content
+
+def rowend gap="8"
+  row gap=$gap
+    spacer grow
+    content
+
+def rowcenter gap="8"
+  row gap=$gap
+    spacer grow
+    content
+    spacer grow
+
+def column gap="8"
+  col gap=$gap align=fill grow
+    content
+
+def card title tone="plain" w
+  repeat tones
+    if tone is $name
+      box $id (
+          fill=$fill stroke=$stroke sw=1.5 radius=6 pad=10 gap=8 w=$w
+          valign=start align=fill
+      )
+        if title
+          text "$title" bold size=10.5 h=14 base=0.476 center
+        content
+
+def lines n="2" w="" width="100"
+  col gap=7 w=$w h=14*$n-4 align=fill
+    repeat bars n=$n var=k
+      shape grow w=$w h=7
+        rect w=w*$width*$pct/10000 h=7 r=3 fill=placeholder sw=0
+
+def plainlink text color="primary"
+  text $id "$text" color=$color size=9.5 h=14 padx=2 base=0.42
+
+def link text center color="primary"
+  if center
+    rowcenter gap=0
+      plainlink id=$id "$text" color=$color
+  if not center
+    plainlink id=$id "$text" color=$color
+
+def note text center color="muted"
+  if center
+    text "$text" color=$color size=9 h=12 padx=2 italic grow center
+  if not center
+    text "$text" color=$color size=9 h=12 padx=2 italic grow
+
+def title text size="10.5" center
+  if center
+    text "$text" bold size=$size h=$size+4 base=0.4 grow center
+  if not center
+    text "$text" bold size=$size h=$size+4 base=0.4 grow
+
+def space n="1"
+  spacer w=1 h=$n
+
+def divider
+  shape grow h=1
+    line x1=0 y1=0 x2=w y2=0 stroke=border-soft sw=1
+
+def badge text c="primary"
+  shape "$text" bold size=9 color=$c h=18 padx=8
+    rect r=9 fill=$c-soft stroke=$c sw=1
+
+def plainbutton text outline
+  if outline
+    shape $id "$text" bold size=10 color=primary h=28 padx=16
+      rect r=4 fill=surface stroke=primary sw=1.5
+  if not outline
+    shape $id "$text" bold size=10 color=surface h=28 padx=16
+      rect r=4 fill=primary stroke=primary sw=1
+
+def button text outline right center
+  if right
+    rowend gap=0
+      plainbutton id=$id "$text" $outline
+  if center
+    rowcenter gap=0
+      plainbutton id=$id "$text" $outline
+  if not right
+    if not center
+      plainbutton id=$id "$text" $outline
+
+def field label secret nolabel search
+  shape $id grow h=24
+    if nolabel
+      rect x=0 y=1 w=w h=22 r=3 fill=surface stroke=border sw=1
+      if search
+        label "⌕" x=w-8 y=12 right color=muted size=10 base=0.4
+    if not nolabel
+      if label
+        label "$label" x=w*0.38-8 y=12 right size=10 base=0.4
+        rect x=w*0.38 y=1 w=w*0.62 h=22 r=3 fill=surface stroke=border sw=1
+        if secret
+          label "••••••" x=w*0.38+8 y=12 left color=muted size=10 base=0.4
+        if search
+          label "⌕" x=w-8 y=12 right color=muted size=10 base=0.4
+      if not label
+        rect x=0 y=1 w=w h=22 r=3 fill=surface stroke=border sw=1
+
+def select label
+  shape grow h=24
+    rect x=0 y=1 w=w h=22 r=3 fill=surface stroke=border sw=1
+    label "$label" x=8 y=12 left color=muted size=9.5 base=0.42
+    label "▾" x=w-8 y=12 right color=muted size=9 base=0.42
+
+def textarea text h="60"
+  shape grow h=$h
+    rect w=w h=h r=3 fill=surface stroke=border sw=1
+    if text
+      label "$text" x=8 y=11 left color=muted size=9.5 base=0.42
+
+def image h="80" symbol="▣"
+  shape grow h=$h
+    rect w=w h=h r=6 fill=primary-soft stroke=primary-border sw=1
+    label "$symbol" x=w/2 y=h/2 size=14 color=primary base=0.357
+
+def thumb symbol="▣" size="40"
+  shape w=$size h=$size
+    rect r=4 fill=primary-soft stroke=primary-border sw=1
+    label (
+        "$symbol" x=w/2 y=h/2 size=$size*0.3125 color=primary
+        base=4/($size*0.3125)
+    )
+
+def checkbox text checked
+  if checked
+    shape "$text" size=10 left h=20 padx=10 tx=20 base=0.4
+      rect x=0 y=4 w=12 h=12 r=2 fill=primary stroke=primary sw=1.5
+      label "✓" x=6 y=10 bold color=surface size=10 base=0.4
+  if not checked
+    shape "$text" size=10 left h=20 padx=10 tx=20 base=0.4
+      rect x=0 y=4 w=12 h=12 r=2 fill=surface stroke=primary sw=1.5
+
+def radio text checked
+  shape "$text" size=10 left h=20 padx=11 tx=22 base=0.4
+    ellipse cx=8 cy=10 rx=6 ry=6 fill=surface stroke=primary sw=1.5
+    if checked
+      ellipse cx=8 cy=10 rx=3 ry=3 fill=primary stroke=primary sw=0
+
+def steps
+  box fill=surface stroke=border-soft sw=1 radius=4 pad=0 h=24 align=fill
+    row gap=0
+      content
+
+def step text on
+  if on
+    shape "$text" grow h=24 bold size=9.5 color=primary base=0.42
+      rect x=4 y=3 w=w-8 h=18 r=9 fill=primary-soft stroke=primary sw=1.5
+  if not on
+    shape "$text" grow h=24 size=9.5 color=muted base=0.42
+
+def nav
+  box fill=bar stroke=border-soft sw=1 radius=4 padx=14 pady=0 h=30 align=fill
+    row gap=24
+      content
+
+def navitem text on
+  if on
+    shape "$text" bold size=10 color=primary h=30 padx=0 base=0.4 left tx=0
+      line x1=0 y1=26 x2=w y2=26 stroke=primary sw=2
+  if not on
+    shape "$text" size=10 h=30 padx=0 base=0.4 left tx=0
+
+def tabs
+  layer
+    shape stretch
+      line x1=0 y1=25 x2=w y2=25 stroke=border-soft sw=1
+    row gap=2 at=1,0
+      content
+
+def tab text on
+  if on
+    shape "$text" bold size=9.5 color=primary w=108 h=26 base=0.42
+      rect r=4 fill=surface stroke=border sw=1.5
+      rect x=1 y=23 w=w-2 h=4 fill=surface sw=0
+  if not on
+    shape w=108 h=26
+      rect y=4 h=21 r=4 fill=bar stroke=border-soft sw=1
+      label "$text" y=14 size=9.5 color=muted base=0.42
+
+def avatar text size="32"
+  shape w=$size h=$size
+    ellipse fill=primary-soft stroke=primary-border sw=1
+    label "$text" bold size=$size*0.36 color=primary base=0.361
+
+data starstr k s
+  1, ★☆☆☆☆
+  2, ★★☆☆☆
+  3, ★★★☆☆
+  4, ★★★★☆
+  5, ★★★★★
+
+def stars n="4"
+  repeat starstr
+    if n is $k
+      text "$s" color=warning size=13 h=16 base=0.385
+
+data glyphs g ch
+  star, ★
+  heart, ♥
+  bell, ♪
+  gear, ⚙
+  user, ☺
+  mail, ✉
+  menu, ☰
+  search, ⌕
+
+def icon name size="18"
+  repeat glyphs
+    if name is $g
+      text "$ch" color=primary size=$size h=$size+4 base=0.36
+
+def table
+  box fill=surface stroke=border-soft sw=1 radius=4 pad=0 gap=0 align=fill
+    content
+
+def cell t x bold
+  if bold
+    label "$t" x=$x y=12 left size=9.5 base=0.42 bold
+  if not bold
+    label "$t" x=$x y=12 left size=9.5 base=0.42
+
+def trow a b c d f2="0" f3="0" f4="0" bold last
+  shape grow h=24
+    if bold
+      rect r=4 fill=bar stroke=border-soft sw=1
+    cell "$a" x=8 $bold
+    if b
+      cell "$b" x=w*$f2+8 $bold
+    if c
+      cell "$c" x=w*$f3+8 $bold
+    if d
+      cell "$d" x=w*$f4+8 $bold
+    if not last
+      line x1=0 y1=24 x2=w y2=24 stroke=border-soft sw=1
+
+def timeline
+  row gap=0
+    content
+
+def tl text filled="0" now="0" l="0" r="0" sl="0" sr="0"
+  shape grow h=50
+    line x1=w/2*(1-$l) y1=12 x2=w/2*(1+$r) y2=12 stroke=border-soft sw=3
+    if sl
+      line x1=0 y1=12 x2=w/2 y2=12 stroke=success sw=3
+    if sr
+      line x1=w/2 y1=12 x2=w y2=12 stroke=success sw=3
+    if filled
+      ellipse cx=w/2 cy=12 rx=7 ry=7 fill=success stroke=success sw=2
+    if not filled
+      ellipse cx=w/2 cy=12 rx=7 ry=7 fill=surface stroke=success sw=2
+    if now
+      label "$text" x=w/2 y=34.4 bold size=9 base=0.4
+    if not now
+      label "$text" x=w/2 y=34.4 size=9 base=0.4
+
+def switch text on
+  shape "$text" size=10 left h=22 padx=10 tx=42 base=0.4
+    if on
+      rect x=0 y=3 w=32 h=16 r=8 fill=primary stroke=primary sw=1
+      ellipse cx=24 cy=11 rx=6 ry=6 fill=surface stroke=surface sw=1
+    if not on
+      rect x=0 y=3 w=32 h=16 r=8 fill=bar stroke=border sw=1
+      ellipse cx=8 cy=11 rx=6 ry=6 fill=surface stroke=border sw=1
+
+def progress pct
+  shape grow h=10
+    rect y=1 w=w h=8 r=4 fill=bar stroke=border sw=1
+    rect y=1 w=w*$pct/100 h=8 r=4 fill=primary stroke=primary sw=1
+
+def chart title kind="line" height="90"
+  col gap=4 align=fill
+    text "$title" bold grow h=14
+    shape grow h=$height
+      rect r=4 fill=surface stroke=border sw=1
+      path d="M 12 8 L 12 h-12 L w-8 h-12" stroke=border sw=1
+      if kind is line
+        path (
+            d="M 12 h*0.7 L w*0.3 h*0.45 L w*0.5 h*0.6 L w*0.7 " &
+                "h*0.25 L w-12 h*0.35"
+            stroke=primary sw=2
+        )
+      if kind is bar
+        rect (
+            x=w*0.15 y=h*0.5 w=w*0.1 h=h*0.5-12 fill=primary stroke=primary
+            sw=1
+        )
+        rect (
+            x=w*0.35 y=h*0.3 w=w*0.1 h=h*0.7-12 fill=primary stroke=primary
+            sw=1
+        )
+        rect (
+            x=w*0.55 y=h*0.6 w=w*0.1 h=h*0.4-12 fill=primary stroke=primary
+            sw=1
+        )
+        rect (
+            x=w*0.75 y=h*0.2 w=w*0.1 h=h*0.8-12 fill=primary stroke=primary
+            sw=1
+        )

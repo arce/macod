@@ -1,0 +1,20 @@
+# usecase: use case diagrams over `graph node=uc`. import usecase
+#
+#   graph node=uc direction=right gap=90
+#     cli "Customer" kind=actor
+#     cli -> tip=none buy "Buy a ticket"
+import styles
+
+def uc title kind=""
+  if kind is actor
+    col $id gap=2 align=center
+      shape w=34 h=60
+        ellipse cx=17 cy=10 rx=9 ry=9 fill=white sw=1.8
+        line x1=17 y1=19 x2=17 y2=40 sw=1.8
+        line x1=3 y1=27 x2=31 y2=27 sw=1.8
+        line x1=17 y1=40 x2=5 y2=58 sw=1.8
+        line x1=17 y1=40 x2=29 y2=58 sw=1.8
+      text "$title" bold
+  if not kind
+    shape $id "$title" padx=26 pady=16
+      ellipse fill=white sw=1.8

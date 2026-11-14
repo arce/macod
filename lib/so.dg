@@ -1,0 +1,88 @@
+# so: figures of the operating-systems textbook. import so
+#
+#   oval ID ["text"] [w= h= fill=]            an ellipse with its text (a step, a file...)
+#   cloud ID ["text"] [w= h= fill=]           a cloud (an application, a system call)
+#   brace ID [h=]                             a right brace } that spans a group (put it next to what it groups)
+#   vdots ID [h=]                             three vertical dots (":"): "and so on"
+#   downs ID [w=243 h=30]                     two short arrows pointing down, side by side (between two layers of a system)
+#   thread ID [h=]  threads ID [n=4 h=70 gap=30]   a thread (a zigzag line) and a row of them
+#   xmark ID                                      a small cross (a cancelled thread)
+#   pn ID [name=A]  rn ID   a process (thick square with a letter) and a resource (square with a dot) of a resource-allocation graph
+#   queue ID [n=3 w= h=]  cpu ID ["CPU"]  ptable ID [cols=2]   a queue of processes, a CPU, a table (text children, cols per row)
+
+def oval label w="" h="" fill="light"
+  if w
+    shape $id "$label" w=$w h=$h fill=$fill
+      ellipse fill=self
+  if not w
+    shape $id "$label" minw=90 minh=50 padx=22 pady=14 fill=$fill
+      ellipse fill=self
+
+def cloud label w="" h="" fill="light"
+  shape $id "$label" w=$w h=$h minw=110 minh=56 padx=26 pady=16 fill=$fill
+    path (
+        d="M w*0.22,h*0.86 A w*0.16,h*0.26 0 0 1 w*0.06,h*0.5 A " &
+            "w*0.2,h*0.3 0 0 1 w*0.3,h*0.2 A w*0.24,h*0.2 0 0 1 " &
+            "w*0.66,h*0.14 A w*0.18,h*0.26 0 0 1 w*0.9,h*0.34 A " &
+            "w*0.14,h*0.3 0 0 1 w*0.93,h*0.68 A w*0.2,h*0.22 0 0 1 " &
+            "w*0.7,h*0.88 A w*0.3,h*0.12 0 0 1 w*0.22,h*0.86 Z"
+        fill=self
+    )
+
+def brace h="60"
+  shape $id w=12 h=$h
+    path (
+        d="M 0,0 Q w/2,0 w/2,h*0.15 L w/2,h*0.4 Q w/2,h/2 w,h/2 Q " &
+            "w/2,h/2 w/2,h*0.6 L w/2,h*0.85 Q w/2,h 0,h"
+        sw=1.2
+    )
+
+def vdots h="22"
+  shape $id w=6 h=$h
+    ellipse cx=3 cy=3 rx=1.6 ry=1.6 fill=#1a1919 sw=0
+    ellipse cx=3 cy=h/2 rx=1.6 ry=1.6 fill=#1a1919 sw=0
+    ellipse cx=3 cy=h-3 rx=1.6 ry=1.6 fill=#1a1919 sw=0
+
+def downs w="243" h="30"
+  grid $id cols=2 gap=0
+    spacer $id-a w=$w h=$h
+    spacer $id-b w=$w h=$h
+  $id-a.top -> $id-a.bottom
+  $id-b.top -> $id-b.bottom
+
+def thread h="70" w="12"
+  shape $id w=$w h=$h
+    poly pts="0,0 w,h*0.25 0,h*0.5 w,h*0.75 0,h" open sw=1.2
+
+def threads n="4" h="70" gap="30"
+  row $id gap=$gap
+    repeat n=$n var=k
+      thread $id-t$k h=$h
+
+def xmark
+  shape $id w=10 h=10
+    line x1=0 y1=0 x2=w y2=h sw=1.4
+    line x1=0 y1=h x2=w y2=0 sw=1.4
+
+def queue n="3" w="" h="62"
+  box $id light w=$w h=$h pad=8 align=center
+    row gap=10
+      repeat n=$n var=q
+        shape $id-s$q w=20 h=22
+          rect fill=white
+
+def cpu text="CPU" w="48" h="44"
+  box $id "$text" light w=$w h=$h sw=2.4
+
+def ptable cols="2"
+  box $id white pad=8 align=start
+    grid cols=$cols gap=10 align=center
+      content
+
+def pn name="A"
+  box $id "$name" light w=36 h=36 sw=2.4
+
+def rn name=""
+  shape $id w=30 h=30
+    rect fill=light
+    ellipse cx=15 cy=15 rx=2.2 ry=2.2 fill=#1a1919 sw=0

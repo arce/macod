@@ -1,0 +1,18 @@
+# seq: sequence diagrams drawn with defs only (no macro). import seq
+#
+#   canvas w=520 h=320
+#     part WHO "Label" n=0 [w=110 end=300]       a participant in column n (170 pt apart); end: where its lifeline stops
+#     msg FROM TO "text" n=1 [dash="6 4"]       a message on row n (44 pt apart)
+#
+# with `data` and `repeat` the participants and messages come from tables (see dg/secuencia-dg.dg).
+import styles
+
+def part who label n="0" w="110" end="300"
+  box $who "$label" at=($n)*170,0 w=$w
+  spacer $who-end alignx=$who at=0,$end w=0 h=0
+  $who.bottom -- $who-end dash="5 4"
+
+def msg from to text="" n="1" dash=""
+  spacer $id-a alignx=$from at=0,36+44*($n) w=0 h=0
+  spacer $id-b alignx=$to at=0,36+44*($n) w=0 h=0
+  $id-a -> $id-b "$text" dash=$dash

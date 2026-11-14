@@ -1,0 +1,62 @@
+# blocks: figures made of boxes that touch each other: layers, a log of cells, tables. import blocks
+#
+#   layers ID [w= fill=]                a stack of layers (one box cut into horizontal bands)
+#     layer "Application" [white|light|... fill= h= bold]           one band
+#
+#   cells ID                            a row of cells, like a log
+#     cell ID ["Event"] [w= h=36 fill= index="0" above="First entry" dots]
+#       index: a number under the cell; above: a bold note over it with an arrow; dots: the cell is a dotted line ("......")
+#
+#   table ID cols=N [fill=]             a table of N columns: the cells go in order, N per row
+#     th "Header" [w= h=]               a cell of the header (light blue)
+#     td "Value" [light|white|...  w= h= hl]    a cell of the body (white)
+#   hl marks a column: give hl="top" to its first cell, hl to the ones in the middle and hl="bottom" to the last: a heavy outline
+#
+# `id~N` is the N-th child of any container: `app~2.right -> other` goes from the second layer; `log~3.bottom -> ...` from the third cell.
+
+def layers w="" fill="light"
+  col $id gap=0 align=stretch radius=8 border=1 sw=2 w=$w
+    content
+
+def layer text fill="light" h="" bold
+  shape $id "$text" stretch minh=0 padx=14 pady=8 h=$h fill=$fill $bold
+    rect fill=self sw=1.6
+
+def cells
+  row $id gap=0 align=start
+    content
+
+def cell text fill="white" w="" h="36" index="" above="" dots
+  col $id-w gap=0 caption="$index" capsize=14
+    shape $id "$text" minw=36 padx=9 w=$w h=$h fill=$fill
+      rect fill=self sw=1.6
+      if dots
+        line x1=10 x2=w-10 y1=h/2 y2=h/2 dash="0 5" linecap=round sw=2.4
+    if above
+      text $id-n "$above" bold at=0,-46 float alignx=$id
+  if above
+    $id-n -> $id.top sw=2.5
+
+def table cols fill="white"
+  grid $id cols=$cols gap=0 align=stretch radius=9 border=1 sw=2.2
+    content
+
+def th text w="" h="" fill="light" bold hl
+  shape $id "$text" stretch minw=50 minh=37 padx=11 w=$w h=$h fill=$fill $bold
+    rect fill=self sw=1.6
+    if hl
+      line x1=0 y1=0 x2=0 y2=h sw=4
+      line x1=w y1=0 x2=w y2=h sw=4
+    if hl is top
+      line x1=0 y1=0 x2=w y2=0 sw=4
+
+def td text w="" h="" fill="white" bold hl
+  shape $id "$text" stretch minw=50 minh=37 padx=11 w=$w h=$h fill=$fill $bold
+    rect fill=self sw=1.6
+    if hl
+      line x1=0 y1=0 x2=0 y2=h sw=4
+      line x1=w y1=0 x2=w y2=h sw=4
+    if hl is top
+      line x1=0 y1=0 x2=w y2=0 sw=4
+    if hl is bottom
+      line x1=0 y1=h x2=w y2=h sw=4

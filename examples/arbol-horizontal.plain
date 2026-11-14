@@ -1,0 +1,26 @@
+style silberschatz
+  box radius=0 sw=1.3 padx=8 pady=4
+  arrow sw=1.3 italic
+#line 5
+style oreilly
+  box radius=8 sw=1.6 padx=14 pady=8
+  arrow sw=2.5
+#line 2
+diagram arbol-horizontal caption="tree direction=right"
+#line 1
+  row gap=36 align=center
+    box raiz "Sistema" light
+    col gap=20 align=start
+      row gap=36 align=center
+        box a "Documentos"
+        col gap=20 align=start
+          row gap=36 align=center
+            box a1 "Informes"
+          row gap=36 align=center
+            box a2 "Cartas"
+      row gap=36 align=center
+        box b "Imágenes"
+  a.right -> a1.left elbow
+  a.right -> a2.left elbow
+  raiz.right -> a.left elbow
+  raiz.right -> b.left elbow

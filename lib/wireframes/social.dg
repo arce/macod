@@ -1,0 +1,29 @@
+import flow
+def status name handle body initials="☺"
+  card
+    row gap=10 align=start
+      avatar "$initials"
+      column gap=4
+        row gap=6
+          text "$name" bold grow h=14
+          text "$handle" color=muted grow h=14
+        text "$body" grow h=14
+        row gap=0
+          link "Reply"
+          spacer grow
+          link "Share"
+          spacer grow
+          link "Like"
+def profile name handle initials="☺" posts="0" followers="0" following="0"
+  column gap=8
+    row gap=12
+      avatar "$initials" size=56
+      column gap=2
+        title "$name"
+        text "$handle" color=muted grow h=14
+    row gap=0
+      text "$posts posts" bold grow h=14
+      spacer grow
+      text "$followers followers" bold grow h=14
+      spacer grow
+      text "$following following" bold grow h=14

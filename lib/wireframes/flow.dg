@@ -1,0 +1,62 @@
+style flow
+  arrow curve full color=primary sw=2 size=9 base=0.514
+
+data nodetones name fill stroke
+  plain, canvas, border
+  blue, primary-soft, primary-border
+  gray, canvas, border
+  green, success-soft, success
+  orange, warning-soft, warning
+
+def flow title footer fgap="0" ftop="0" columns="1" gapx="40" gapy="30"
+  col gap=0 align=fill
+    shape grow h=32
+      label "$title" x=w/2 y=-4 bold size=15 base=0.4
+    spacer w=1 h=$ftop
+    grid cols=$columns gapx=$gapx gapy=$gapy align=center
+      content
+    if footer
+      spacer w=1 h=$fgap
+      shape grow h=24
+        label "$footer" x=w/2 y=27.8 size=10.5 color=muted base=0.4
+
+def node text tone="plain" w h="60" span r="8" sub ty
+  repeat nodetones
+    if tone is $name
+      shape $id (
+          "$text" bold size=11 base=0.3636 wrap w=$w h=$h span=$span ty=$ty
+      )
+        rect r=$r fill=$fill stroke=$stroke sw=2
+        if sub
+          label "$sub" x=w/2 y=h/2+6.5 size=9 color=muted base=0.4444
+
+def page text w h="48" span sub ty
+  node $id "$text" tone=blue w=$w h=$h span=$span sub="$sub" ty=$ty
+
+def remote text w h="48" span sub ty
+  node $id "$text" w=$w h=$h span=$span sub="$sub" ty=$ty
+
+def gateway text w h="48" span sub ty
+  node $id "$text" tone=orange w=$w h=$h span=$span sub="$sub" ty=$ty
+
+def chunk text w h="48" span sub ty
+  node $id "$text" w=$w h=$h span=$span sub="$sub" ty=$ty r=$h/2
+
+def pages text w h span
+  shape $id "$text" bold size=11 base=0.3636 wrap w=$w h=$h span=$span
+    rect x=10 y=-10 r=8 fill=primary-soft stroke=primary-border sw=2
+    rect x=5 y=-5 r=8 fill=primary-soft stroke=primary-border sw=2
+    rect r=8 fill=primary-soft stroke=primary-border sw=2
+
+def frame title ids
+  shape around=$ids pad=14 padtop=30 float
+    rect r=10 fill=canvas stroke=primary sw=1.5 dash=6,4
+    label "$title" x=w/2 y=13.8 bold size=10.5 color=primary base=0.4
+
+def store text w="150" h="70" span
+  shape $id "$text" bold size=11 base=0.3636 wrap w=$w h=$h span=$span ty=4.5
+    path (
+        d="M 0 9 A w/2 9 0 0 1 w 9 L w h-9 A w/2 9 0 0 1 0 h-9 Z"
+        fill=success-soft stroke=success sw=2
+    )
+    path d="M 0 9 A w/2 9 0 0 0 w 9" stroke=success sw=2

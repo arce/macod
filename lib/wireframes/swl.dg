@@ -1,0 +1,324 @@
+# swl: the widgets of Swinglet (.swl files) drawn as a wireframe. A .swl file is read as it is:
+#
+#   import swl
+#   diagram app style=ui
+#     <the text of the .swl file, indented>       (include lines are expanded by textod)
+#
+# In the bundle (diagrams-min.js) that is one call:  Diagrams.renderSwl(text, extra, theme, name), where extra resolves the
+# included files (a map, or a function name -> text).
+#
+# `alias prefix swl_` makes the names of the .swl file (row, line, field, label, list, tree, table, form, button...) mean the
+# components of this library, only in the text of the diagram (the bodies below keep using the textod elements with those names).
+# Every component ends with `*`: it ignores the attributes and words it does not use (actionCommand, toolTipText, look...).
+# `id=` is the Swinglet id and is only used for the placeholder text of an empty label or field. The text between quotes is `text`.
+#
+# Sizes: `flex` (a word, or flex=N) shares the free space of a row or a column like CSS flex; width= / height= fix it.
+# One drawing is one state of the window (the bundle's swlStates() prepares the text): a stack draws ONE page (the one with `show`, the one the
+# tabbedpane of choice=<id> selects, value=, or the first); a tabbedpane / buttongroup draws its options (`options="a,b"` too), the selected one
+# pressed (`option "x" show`); `menu "File" show` draws the menu open over the window (nothing moves), its items under the bar. Dialogs are drawn only with `show`.
+# Not drawn: the items of the menus that are closed, the invisible kits (filechooser, editkit...) and the wrapping of a toolbar that does not fit.
+import ui
+alias prefix swl_
+
+# ---- window
+def swl_frame text w="1000" h="640" *
+  box fill=surface stroke=border sw=1.5 radius=6 pad=0 gap=0 w=$w h=$h valign=start align=fill
+    shape "$text" grow h=24 size=9.5 color=muted base=0.42
+      path d="M 0 24 L 0 6 Q 0 0 6 0 L w-6 0 Q w 0 w 6 L w 24 Z" fill=bar stroke=border sw=1.5
+    col pad=0 gap=0 align=fill h=$h-26
+      content
+
+def swl_dialog text show w="480" h="360" *
+  if show
+    box fill=surface stroke=border sw=1.5 radius=8 pad=0 gap=0 w=$w h=$h valign=start align=fill
+      shape "$text" grow h=36 bold size=10.5 base=0.4 left tx=14
+        path d="M 0 36 L 0 8 Q 0 0 8 0 L w-8 0 Q w 0 w 8 L w 36 Z" fill=surface stroke=border-soft sw=1
+      col pad=0 gap=0 align=fill
+        content
+
+# ---- invisible
+def swl_filechooser *
+def swl_editkit *
+def swl_viewkit *
+def swl_filekit *
+def swl_findbar *
+
+# ---- menus (the bar shows the titles; the items are not drawn)
+def swl_menubar *
+  box fill=bar stroke=border-soft sw=1 radius=0 padx=10 pady=0 gap=0 h=26 align=fill valign=center
+    row gap=18
+      content
+
+def swl_menu text show *
+  if show
+    shape "$text" size=10 h=22 padx=2 base=0.4 color=primary
+      rect r=3 fill=primary-soft stroke=primary sw=1
+  if not show
+    text "$text" size=10 h=26 base=0.4 left
+
+# the open menu (made by swlStates from `menu "x" show`). dropdown: an overlay, drawn after the window at px,py (under its title in the bar), so nothing moves;
+# popup: the same box in the flow, under the bar, for a window whose bar is not the first thing in it
+def swl_dropdown text px py *
+  box at=$px,$py fill=surface stroke=border sw=1 radius=3 padx=0 pady=4 gap=0 w=230 valign=start align=fill
+    col gap=0 align=fill
+      content
+
+def swl_popup text offset="0" *
+  row gap=0 align=start valign=start
+    spacer w=$offset
+    box fill=surface stroke=border sw=1 radius=3 padx=0 pady=4 gap=0 w=230 valign=start align=fill
+      col gap=0 align=fill
+        content
+
+def swl_menuitem text accelerator enabled *
+  if enabled is false
+    row gap=8 padx=14 h=22 align=fill valign=center
+      text "$text" size=10 base=0.4 left grow color=placeholder
+      text "$accelerator" size=10 base=0.4 right color=placeholder
+  if enabled is not false
+    row gap=8 padx=14 h=22 align=fill valign=center
+      text "$text" size=10 base=0.4 left grow
+      text "$accelerator" size=10 base=0.4 right color=muted
+
+def swl_checkboxmenuitem text accelerator enabled *
+  swl_menuitem "☐ $text" accelerator=$accelerator enabled=$enabled
+
+def swl_menuline *
+  shape w=226 h=9
+    line x1=0 y1=4 x2=226 y2=4 stroke=border-soft sw=1
+
+# ---- toolbar and its items
+def swl_toolbar status *
+  if status
+    box fill=surface stroke=border-soft sw=1 radius=0 padx=8 pady=0 gap=0 h=28 align=fill valign=center
+      row gap=6
+        content
+  if not status
+    box fill=surface stroke=border-soft sw=1 radius=0 padx=8 pady=0 gap=0 h=34 align=fill valign=center
+      row gap=6
+        content
+
+def swl__btn label enabled selected
+  if selected
+    shape "$label" size=10 color=primary h=24 padx=10 base=0.4 bold
+      rect r=4 fill=primary-soft stroke=primary sw=1.5
+  if not selected
+    if enabled is false
+      shape "$label" size=10 color=placeholder h=24 padx=10 base=0.4
+        rect r=4 fill=bar stroke=border-soft sw=1
+    if enabled is not false
+      shape "$label" size=10 h=24 padx=10 base=0.4
+        rect r=4 fill=surface stroke=border sw=1
+
+def swl_button text icon enabled selected *
+  if icon is icons/save.png
+    swl__btn "▾" enabled=$enabled selected=$selected
+  if icon is icons/folder.png
+    swl__btn "▭" enabled=$enabled selected=$selected
+  if icon is icons/trash.png
+    swl__btn "✕" enabled=$enabled selected=$selected
+  if icon is not icons/save.png
+    if icon is not icons/folder.png
+      if icon is not icons/trash.png
+        swl__btn "$icon$text" enabled=$enabled selected=$selected
+
+def swl_togglebutton text icon enabled selected *
+  swl_button "$text" icon=$icon enabled=$enabled selected=$selected
+
+def swl__lab label class flex
+  if class is muted
+    text "$label" size=10 h=16 base=0.42 color=muted left flex=$flex
+  if class is not muted
+    text "$label" size=10 h=16 base=0.42 left flex=$flex
+
+def swl_label text class flex *
+  if text
+    swl__lab "$text" class=$class flex=$flex
+  if not text
+    swl__lab "‹$id›" class=$class flex=$flex
+
+def swl_|
+  shape w=9 h=22
+    line x1=4 y1=1 x2=4 y2=21 stroke=border sw=1
+
+def swl_glue *
+  spacer flex
+
+def swl_history *
+  swl__btn "↶" enabled=false
+  swl__btn "↷" enabled=false
+
+# ---- containers
+def swl_hbox width height flex="1" *
+  row gap=0 align=stretch w=$width h=$height flex=$flex
+    content
+
+def swl_vbox width height flex="1" *
+  col gap=0 align=fill w=$width h=$height flex=$flex
+    content
+
+def swl_stack width height flex="1" *
+  col gap=0 align=fill w=$width h=$height flex=$flex
+    content
+
+def swl_panel text width height flex="1" *
+  box fill=surface stroke=border sw=1 radius=4 padx=12 pady=10 gap=6 w=$width h=$height flex=$flex align=fill valign=start
+    if text
+      text "$text" bold size=10.5 h=14 base=0.476 left
+    lines n=4
+
+def swl_detail width height flex="1" *
+  box fill=surface stroke=border sw=1 radius=4 padx=14 pady=10 gap=6 w=$width h=$height flex=$flex align=fill valign=start
+    content
+
+def swl_form width height flex="1" *
+  box fill=surface stroke=border sw=1 radius=4 padx=14 pady=10 gap=8 w=$width h=$height flex=$flex align=fill valign=start
+    content
+
+# ---- text areas, images
+# a textarea / textfield with text="Label" is a field of a form: the label above and a box of `rows` lines (a textarea without rows fills the free space)
+def swl__fieldbox text placeholder rows="1" mono
+  col gap=2 align=fill
+    if text
+      text "$text" size=9 color=muted left h=16 base=0.42
+    shape h=$rows*18+14 stretch
+      rect x=0 y=0 w=w h=h r=3 fill=surface stroke=border sw=1
+      if placeholder
+        label "$placeholder" x=10 y=h/2 left color=placeholder size=9.5 base=0.42
+
+def swl_textfield text placeholder *
+  swl__fieldbox "$text" placeholder="$placeholder"
+
+def swl_textarea text placeholder rows width height flex="1" *
+  if rows
+    swl__fieldbox "$text" placeholder="$placeholder" rows=$rows
+  if not rows
+    swl__textarea placeholder=$placeholder width=$width height=$height flex=$flex
+
+def swl__textarea placeholder width height flex="1"
+  shape w=$width h=$height flex=$flex
+    rect x=6 y=6 w=w-12 h=h-12 r=3 fill=surface stroke=border sw=1
+    if placeholder
+      label "$placeholder" x=18 y=22 left color=placeholder size=9.5 base=0.42
+
+def swl_editorpane placeholder width height flex="1" *
+  shape w=$width h=$height flex=$flex
+    rect x=6 y=6 w=w-12 h=h-12 r=3 fill=surface stroke=border sw=1
+    if placeholder
+      label "$placeholder" x=18 y=22 left color=placeholder size=9.5 base=0.42
+
+def swl_svgview empty width height flex="1" *
+  shape w=$width h=$height flex=$flex
+    rect w=w h=h fill=canvas stroke=border-soft sw=1
+    label "$empty" x=w/2 y=h/2 color=placeholder size=10 base=0.4
+
+def swl_htmlpane empty width height flex="1" *
+  swl_svgview "$empty" width=$width height=$height flex=$flex
+
+def swl_stage width height flex="1" *
+  shape w=$width h=$height flex=$flex
+    rect w=w h=h fill=canvas stroke=border-soft sw=1
+    rect x=w*0.1 y=h*0.1 w=w*0.8 h=h*0.8 fill=surface stroke=border sw=1.5
+
+# ---- lists: three samples of the row (row > line > field) the .swl file describes
+def swl_list placeholder width height flex="1" *
+  box fill=surface stroke=border sw=1 radius=4 pad=0 gap=0 w=$width h=$height flex=$flex align=fill valign=start
+    if placeholder
+      row padx=12 pady=4
+        text "$placeholder" size=10 h=16 base=0.42 color=placeholder left
+    repeat n=3 var=k
+      content
+
+def swl_editlist placeholder width height flex="1" *
+  box fill=surface stroke=border sw=1 radius=4 pad=0 gap=0 w=$width h=$height flex=$flex align=fill valign=start
+    if placeholder
+      row padx=12 pady=4
+        text "$placeholder" size=10 h=16 base=0.42 color=placeholder left
+    repeat n=3 var=k
+      content
+
+def swl_row *
+  col gap=2 padx=10 pady=6 align=fill
+    content
+
+def swl_line *
+  row gap=8
+    content
+
+def swl__fld label class flex
+  if class is title
+    text "$label" bold size=12 h=18 base=0.4 left flex=$flex
+  if class is bold
+    text "$label" bold size=10 h=14 base=0.42 left flex=$flex
+  if class is muted
+    text "$label" size=10 h=14 base=0.42 color=muted left flex=$flex
+  if class is not title
+    if class is not bold
+      if class is not muted
+        text "$label" size=10 h=14 base=0.42 left flex=$flex
+
+def swl_field text class flex *
+  if text
+    swl__fld "‹$text›" class=$class flex=$flex
+  if not text
+    swl__fld "‹$id›" class=$class flex=$flex
+
+# ---- tree: sample rows with a disclosure triangle
+def swl__treerow text ind="0" open
+  row gap=5 padx=10 pady=3
+    spacer w=$ind h=1
+    if open
+      text "▾" size=9 h=16 base=0.4 color=muted
+    if not open
+      text "▸" size=9 h=16 base=0.4 color=muted
+    text "$text" size=10 h=16 base=0.42 left
+
+def swl_tree width height flex="1" *
+  box fill=surface stroke=border sw=1 radius=4 pad=0 gap=0 w=$width h=$height flex=$flex align=fill valign=start
+    swl__treerow "section 1" ind=0 open=1
+    swl__treerow "section 1.1" ind=18 open=1
+    swl__treerow "section 1.1.1" ind=36
+    swl__treerow "section 1.2" ind=18
+    swl__treerow "section 2" ind=0
+
+# ---- table (a grid; the cells are filled by the program)
+def swl_table width height flex="1" *
+  shape w=$width h=$height flex=$flex
+    rect w=w h=h r=4 fill=surface stroke=border sw=1
+    rect w=w h=22 r=4 fill=bar stroke=border-soft sw=1
+    repeat n=6 var=i
+      line x1=0 y1=22*($i+2) x2=w y2=22*($i+2) stroke=border-soft sw=1
+    repeat n=3 var=j
+      line x1=w*($j+1)/4 y1=0 x2=w*($j+1)/4 y2=h stroke=border-soft sw=1
+
+# ---- numeric
+def swl_spinner value="0" suffix *
+  shape "$value$suffix" size=10 h=24 padx=26 base=0.4
+    rect r=4 fill=surface stroke=border sw=1
+    label "−" x=11 y=12 size=11 color=muted base=0.36
+    label "+" x=w-11 y=12 size=11 color=muted base=0.36
+
+def swl_progressbar value="0" maximum="100" flex="1" *
+  shape h=12 flex=$flex
+    rect y=1 w=w h=10 r=5 fill=bar stroke=border sw=1
+    rect y=1 w=w*$value/$maximum h=10 r=5 fill=primary stroke=primary sw=1
+
+# ---- choices: the options of a buttongroup or a tabbedpane are drawn as segments; those of a combobox are not
+def swl_option text show *
+  if show
+    shape "$text" size=10 h=26 padx=12 base=0.4 bold color=primary
+      rect fill=primary-soft stroke=primary sw=1.5
+  if not show
+    shape "$text" size=10 h=26 padx=12 base=0.4
+      rect fill=surface stroke=border sw=1
+
+def swl_buttongroup *
+  row gap=0
+    content
+
+def swl_tabbedpane *
+  row gap=0
+    content
+
+def swl_combobox value *
+  select "$value"

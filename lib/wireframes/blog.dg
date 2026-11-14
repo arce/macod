@@ -1,0 +1,14 @@
+import flow
+def article title byline
+  column gap=6
+    title "$title"
+    note "$byline"
+    content
+
+def comment who said initials="☺"
+  row gap=10 align=start
+    avatar "$initials"
+    column gap=2
+      text "$who" bold grow h=14
+      text "$said" grow h=14
+

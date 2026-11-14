@@ -1,0 +1,9 @@
+import styles
+diagram tabla-vacia (
+    caption="datatable: una celda vacía se escribe con comillas."
+)
+  datatable
+    Producto, Stock, Nota
+    Té verde, 12, ""
+    Café, 0, "agotado"
+    Miel, 5, ""

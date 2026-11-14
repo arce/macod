@@ -1,0 +1,17 @@
+# timeline: events along a line. import timeline
+#
+#   timeline
+#     event "2019" "Text" [w=140 c=primary]
+import ui
+
+def timeline
+  row $id gap=0 align=start
+    content
+
+def event year text w="140" c="primary"
+  col gap=6 align=center w=$w
+    text "$year" bold
+    shape w=$w h=16
+      line x1=0 y1=8 x2=w y2=8 sw=2.5
+      ellipse cx=w/2 cy=8 rx=7 ry=7 fill=$c-soft stroke=$c sw=2.5
+    text "$text" size=10

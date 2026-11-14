@@ -1,0 +1,8 @@
+import styles
+diagram grafo-horizontal (
+    caption="graph direction=right, etiquetas en las flechas y un ciclo."
+)
+  graph direction=right
+    a "Cliente" -> "consulta" b "Servidor" -> "lee" c "Base de datos"
+    b -> d "Caché"
+    c -> a

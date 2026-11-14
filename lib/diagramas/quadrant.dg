@@ -1,0 +1,26 @@
+# quadrant: a 2x2 chart with points whose x and y go from 0 to 1. import quadrant
+#
+#   quadrant [w=400 h=300 xaxis="Effort" yaxis="Impact" q1="Quick wins" q2="Big bets" q3="Fill-ins" q4="Money pit"]
+#     dot "Name" x=0.3 y=0.8
+#   q1 is the top-right corner, q2 the top-left, q3 the bottom-left and q4 the bottom-right.
+import styles
+
+def quadrant w="400" h="300" xaxis="" yaxis="" q1="" q2="" q3="" q4=""
+  col $id gap=4 align=center
+    text "$yaxis" italic
+    shape w=$w h=$h
+      rect x=0 y=0 w=w h=h fill=white sw=1.6
+      rect x=0 y=0 w=w/2 h=h/2 fill=light sw=0
+      rect x=w/2 y=h/2 w=w/2 h=h/2 fill=light sw=0
+      line x1=w/2 y1=0 x2=w/2 y2=h sw=1.2
+      line x1=0 y1=h/2 x2=w y2=h/2 sw=1.2
+      label "$q2" x=w*0.25 y=18 bold size=10
+      label "$q1" x=w*0.75 y=18 bold size=10
+      label "$q3" x=w*0.25 y=h-10 bold size=10
+      label "$q4" x=w*0.75 y=h-10 bold size=10
+      content
+    text "$xaxis" italic
+
+def dot name x y
+  ellipse cx=($x)*w cy=h-($y)*h rx=5 ry=5 fill=primary-soft stroke=primary sw=2
+  label "$name" x=($x)*w y=h-($y)*h-13 size=9

@@ -1,0 +1,13 @@
+import flow
+def account name number balance
+  card tone=blue
+    text "$name" bold grow h=14
+    note "$number"
+    title "$balance"
+
+def transaction date what amount
+  row weights=1,3,1
+    text "$date" color=muted grow h=14
+    text "$what" grow h=14
+    text "$amount" bold right grow h=14
+

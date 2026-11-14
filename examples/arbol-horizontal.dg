@@ -1,0 +1,8 @@
+import styles
+diagram arbol-horizontal caption="tree direction=right"
+  tree direction=right
+    raiz "Sistema" light
+      a "Documentos"
+        a1 "Informes"
+        a2 "Cartas"
+      b "Imágenes"

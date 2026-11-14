@@ -1,0 +1,23 @@
+# uml: class diagrams over `graph node=cls`. import uml
+#
+#   graph node=cls                      the nodes are classes
+#     Animal "Animal" attrs="+name: String\n+age: int" ops="+eat()\n+sleep()"
+#     Animal -> tip=none tail=hollow Dog      inheritance (the parent goes first so it is drawn on top)
+#     Library -> tip=none tail=diamondfill Book        composition
+#     Library -> tip=none tail=diamond Reader          aggregation
+#     Reader -> Book                                   association
+#     Reader -> dash="6 4" Book                        dependency
+#
+#   cls "Title" [attrs="a\nb" ops="c\nd" w=]  (a class with up to three compartments; id= names it outside graph)
+import styles
+
+def cls title attrs="" ops="" w="" abstract
+  col $id gap=0 align=stretch w=$w
+    box light radius=0 sw=1.6 padx=14 pady=7 align=center
+      text "$title" bold $abstract
+    if attrs
+      box white radius=0 sw=1.6 padx=10 pady=7 align=start
+        text "$attrs" left
+    if ops
+      box white radius=0 sw=1.6 padx=10 pady=7 align=start
+        text "$ops" left

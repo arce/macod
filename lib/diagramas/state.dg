@@ -1,0 +1,21 @@
+# state: state machines over `graph node=st`. import state
+#
+#   graph node=st gap=50
+#     ini "" kind=start
+#     fin "" kind=end
+#     idle "Idle"
+#     ini -> idle
+#     idle -> "start" running "Running"
+#     running -> "stop" fin
+import styles
+
+def st title kind=""
+  if kind is start
+    shape $id w=22 h=22
+      ellipse fill=text sw=0
+  if kind is end
+    shape $id w=28 h=28
+      ellipse fill=white sw=1.8
+      ellipse cx=w/2 cy=h/2 rx=8 ry=8 fill=text sw=0
+  if not kind
+    box $id "$title" radius=16 padx=18 pady=9
