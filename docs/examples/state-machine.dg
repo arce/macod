@@ -1,0 +1,12 @@
+import state
+diagram state-machine style=oreilly
+  graph node=st direction=right gap=170
+    start "" kind=start
+    end "" kind=end
+    pending "Pending"
+    paid "Paid"
+    shipped "Shipped"
+    start -> pending
+    pending -> "pay" paid
+    paid -> "ship" shipped
+    shipped -> "deliver" end

@@ -2,7 +2,6 @@ PROG     := macod
 CXX      ?= g++
 CXXFLAGS ?= -std=c++17 -O2 -ffp-contract=off
 PREFIX   ?= /usr/local
-DEFS     := -DTEXTOD_NO_CHARTS
 
 HEADERS  := $(shell find src -name '*.hpp')
 LIBS     := $(shell find lib -name '*.dg' -o -name '*.css')
@@ -27,10 +26,10 @@ build/embedded_lib.hpp: $(LIBS) tools/embed.py | build
 	python3 tools/embed.py lib $@
 
 build/$(PROG): src/$(PROG).cpp $(HEADERS) build/embedded_lib.hpp | build
-	$(CXX) $(CXXFLAGS) $(DEFS) -DPROGRAM=\"$(PROG)\" -Ibuild -Isrc -o $@ $<
+	$(CXX) $(CXXFLAGS) -DPROGRAM=\"$(PROG)\" -Ibuild -Isrc -o $@ $<
 
 build/%_test: tests/%_test.cpp $(HEADERS) | build
-	$(CXX) $(CXXFLAGS) $(DEFS) -Isrc -o $@ $<
+	$(CXX) $(CXXFLAGS) -Isrc -o $@ $<
 
 test: $(TESTS) check
 	@for t in $(TESTS); do echo "== $$t"; ./$$t || exit 1; done

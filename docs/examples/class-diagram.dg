@@ -1,0 +1,6 @@
+import uml
+diagram class-diagram style=silberschatz
+  graph node=cls gap=60
+    Animal "Animal" attrs="+name: String\n+age: int" ops="+eat()\n+sleep()"
+    Animal -> tip=none tail=hollow Dog "Dog" attrs="+breed: String" ops="+bark()"
+    Animal -> tip=none tail=hollow Cat "Cat" attrs="+indoor: bool" ops="+meow()"

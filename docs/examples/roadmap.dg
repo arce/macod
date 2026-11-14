@@ -1,0 +1,7 @@
+import timeline
+diagram roadmap style=ui
+  timeline
+    event "Jan" "Idea" w=120
+    event "Mar" "Prototype" w=120 c=warning
+    event "Jun" "Beta" w=120
+    event "Sep" "Version 1.0" w=120 c=success

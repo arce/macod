@@ -6,17 +6,17 @@ style oreilly
   box radius=8 sw=1.6 padx=14 pady=8
   arrow sw=2.5
 #line 2
-diagram grafo-horizontal caption="graph direction=right, etiquetas en las flechas y un ciclo."
+diagram graph-horizontal caption="graph direction=right, labels on the arrows and a cycle."
 #line 1
-  row gap=104 align=center
+  row gap=74 align=center
     col gap=30 align=center
-      box a "Cliente"
+      box a "Client"
     col gap=30 align=center
-      box b "Servidor"
+      box b "Server"
     col gap=30 align=center
-      box c "Base de datos"
-      box d "Caché"
-  a.right -> b.left elbow "consulta"
-  b.right -> c.left elbow "lee"
+      box c "Database"
+      box d "Cache"
+  a.right -> b.left elbow "query"
+  b.right -> c.left elbow "reads"
   b.right -> d.left elbow
   c.top -> a.top elbow margin=30

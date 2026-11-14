@@ -1,0 +1,222 @@
+/* macod — documentation site.
+   Palette taken from the drawing style of macod/textod itself: slate ink, pale blue fill, a single accent. */
+
+:root {
+  color-scheme: light;
+  --paper: #fbfcfd;
+  --ink: #22303f;
+  --ink-2: #4a5b6c;
+  --rule: #cbd5df;
+  --wash: #eef3f9;
+  --fill: #dce8f4;
+  --accent: #1f6aa8;
+  --accent-ink: #164f80;
+  --string: #8a4b14;
+  --comment: #5f6f80;
+
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", "URW Palladio L", P052, Georgia, serif;
+  --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+
+  --measure: 38rem;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { font-size: 18px; -webkit-text-size-adjust: 100%; scroll-padding-top: 4.5rem; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  line-height: 1.6;
+  font-variant-numeric: oldstyle-nums;
+  text-rendering: optimizeLegibility;
+}
+
+img { max-width: 100%; height: auto; }
+
+a { color: var(--accent-ink); text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+a:hover { color: var(--accent); }
+
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+code, pre, kbd { font-family: var(--mono); font-variant-numeric: normal; }
+:not(pre) > code {
+  font-size: 0.86em;
+  background: var(--wash);
+  padding: 0.08em 0.35em;
+  border-radius: 3px;
+}
+
+.wrap { max-width: 72rem; margin: 0 auto; padding: 0 1.25rem; }
+
+.skip {
+  position: absolute; left: 1rem; top: -4rem;
+  background: var(--ink); color: #fff; padding: 0.5rem 0.9rem; z-index: 20;
+}
+.skip:focus { top: 0.75rem; }
+
+/* ---------- top bar ---------- */
+
+.bar {
+  position: sticky; top: 0; z-index: 10;
+  background: rgba(251, 252, 253, 0.94);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--rule);
+}
+.bar .wrap { display: flex; align-items: baseline; justify-content: space-between; gap: 1.5rem; padding-top: 0.7rem; padding-bottom: 0.7rem; }
+.mark { font-family: var(--mono); font-weight: 700; font-size: 1.15rem; color: var(--ink); text-decoration: none; letter-spacing: -0.01em; }
+.bar nav { display: flex; flex-wrap: wrap; gap: 0.2rem 1.4rem; font-size: 0.95rem; }
+.bar nav a { color: var(--ink-2); text-decoration: none; }
+.bar nav a:hover { color: var(--accent); text-decoration: underline; }
+
+/* ---------- hero ---------- */
+
+.hero { padding: 4.5rem 0 3.5rem; }
+.hero h1 {
+  margin: 0 0 1.1rem;
+  max-width: 18em;
+  font-size: clamp(2.3rem, 5.4vw, 3.9rem);
+  line-height: 1.04;
+  letter-spacing: -0.022em;
+  font-weight: 700;
+}
+.hero h1 span { display: block; }
+.lead { max-width: 34rem; margin: 0 0 1.6rem; font-size: 1.2rem; line-height: 1.5; color: var(--ink-2); }
+.cta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.8rem 1.6rem; margin-bottom: 3rem; }
+.btn {
+  display: inline-block; padding: 0.62rem 1.15rem;
+  background: var(--accent); color: #fff; text-decoration: none; font-weight: 600;
+  border-radius: 4px; font-size: 1rem;
+}
+.btn:hover { background: var(--accent-ink); color: #fff; }
+
+.demo { display: grid; grid-template-columns: minmax(0, 20rem) minmax(0, 1fr); gap: 2.5rem; align-items: start; }
+.demo .shell { margin-bottom: 1.6rem; }
+
+/* ---------- sections with the title in the margin ---------- */
+
+.sec { border-top: 1px solid var(--rule); padding: 3rem 0 3.5rem; }
+.sec > .wrap { display: grid; grid-template-columns: 12rem minmax(0, 1fr); gap: 1rem 2.5rem; }
+.sec h2 { margin: 0; font-size: 1.7rem; line-height: 1.15; letter-spacing: -0.012em; position: sticky; top: 5rem; align-self: start; }
+.body { min-width: 0; }
+.body > p, .prose { max-width: var(--measure); margin: 0 0 1.1rem; }
+.body h3 { margin: 2.6rem 0 0.4rem; font-size: 1.3rem; line-height: 1.25; letter-spacing: -0.005em; }
+
+/* ---------- advantages ---------- */
+
+.pros { margin: 0 0 2rem; padding: 0; }
+.pro { display: grid; grid-template-columns: 13.5rem minmax(0, 1fr); gap: 0.3rem 2rem; padding: 1.1rem 0; border-top: 1px solid var(--rule); }
+.pro:last-child { border-bottom: 1px solid var(--rule); }
+.pro dt { font-weight: 700; line-height: 1.3; }
+.pro dd { margin: 0; max-width: 32rem; }
+.note { max-width: var(--measure); color: var(--ink-2); }
+
+/* ---------- listings ---------- */
+
+.listing { margin: 0 0 1.4rem; min-width: 0; }
+.body > .listing { width: fit-content; min-width: min(22rem, 100%); max-width: 100%; }
+.listing > figcaption {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;
+  font-size: 0.88rem; color: var(--ink-2); padding: 0 0 0.35rem;
+}
+.listing > figcaption b { color: var(--ink); font-weight: 700; }
+.copy {
+  font: inherit; font-size: 0.82rem; color: var(--accent-ink);
+  background: none; border: 1px solid var(--rule); border-radius: 3px; padding: 0.05rem 0.6rem; cursor: pointer;
+}
+.copy:hover { border-color: var(--accent); color: var(--accent); }
+
+.listing pre {
+  margin: 0; padding: 0.75rem 0; overflow: auto;
+  background: var(--wash);
+  border-left: 3px solid var(--accent);
+  font-size: 0.8rem; line-height: 1.6; tab-size: 2;
+}
+.listing.scroll pre { max-height: 24rem; }
+.listing pre code { display: block; counter-reset: l; min-width: max-content; }
+.l { display: block; padding: 0 1rem 0 0; min-height: 1.6em; white-space: pre; }
+.l::before {
+  counter-increment: l; content: counter(l);
+  display: inline-block; width: 2.6em; padding-right: 0.9em; text-align: right;
+  color: var(--comment); user-select: none;
+}
+.l.hl { background: var(--fill); box-shadow: inset 3px 0 0 var(--accent); }
+.l.hl::before { color: var(--accent-ink); font-weight: 700; }
+
+.k { color: var(--accent-ink); font-weight: 700; }
+.v { color: var(--accent-ink); }
+.s { color: var(--string); }
+.a { color: var(--ink-2); }
+.c { color: var(--comment); font-style: italic; }
+.d { color: var(--comment); }
+.ar { font-weight: 700; }
+
+/* ---------- figures ---------- */
+
+.fig { margin: 0 0 1.6rem; min-width: 0; }
+.fig img { display: block; }
+.fig figcaption { margin-top: 0.6rem; font-size: 0.88rem; color: var(--ink-2); max-width: 30rem; }
+.fig figcaption b { color: var(--ink); }
+.fig-wide figcaption { max-width: none; }
+
+.shell {
+  width: fit-content; max-width: 100%; min-width: min(24rem, 100%);
+  margin: 0 0 1.4rem; padding: 0.7rem 1rem; overflow: auto;
+  background: var(--wash); border-left: 3px solid var(--accent);
+  font-size: 0.82rem; line-height: 1.7;
+}
+.shell .c { font-style: normal; }
+
+/* ---------- examples ---------- */
+
+.index { display: flex; flex-wrap: wrap; gap: 0.3rem 1.1rem; margin: 0 0 0.5rem; padding: 0; list-style: none; font-size: 0.95rem; }
+
+.plate { display: flex; flex-wrap: wrap; gap: 0.4rem 2.4rem; align-items: flex-start; margin-top: 1.1rem; }
+.plate p { flex: 1 0 100%; margin: 0 0 0.7rem; max-width: var(--measure); }
+.plate .listing { flex: 0 1 auto; max-width: 100%; min-width: min(20rem, 100%); }
+.plate .fig { flex: 0 1 var(--w, 20rem); max-width: 100%; }
+
+/* ---------- options table ---------- */
+
+table { border-collapse: collapse; width: 100%; max-width: 42rem; margin: 0 0 1.4rem; font-size: 0.95rem; }
+th, td { text-align: left; vertical-align: top; padding: 0.55rem 1rem 0.55rem 0; border-top: 1px solid var(--rule); }
+tr:last-child td { border-bottom: 1px solid var(--rule); }
+th { font-weight: 700; }
+td:first-child, th:first-child { white-space: nowrap; width: 1%; padding-right: 1.6rem; }
+
+/* ---------- footer ---------- */
+
+footer { border-top: 1px solid var(--rule); padding: 2rem 0 3rem; color: var(--ink-2); font-size: 0.92rem; }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 0.5rem 2rem; justify-content: space-between; }
+footer p { margin: 0; max-width: 34rem; }
+footer ul { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 0.3rem 1.3rem; }
+
+/* ---------- small screens ---------- */
+
+@media (max-width: 62rem) {
+  .sec > .wrap { grid-template-columns: minmax(0, 1fr); }
+  .sec h2 { position: static; margin-bottom: 0.6rem; }
+  .demo { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
+  .pro { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 40rem) {
+  html { font-size: 17px; }
+  .shell { white-space: pre-wrap; overflow-wrap: anywhere; }
+  .fig.wide { overflow-x: auto; }
+  .fig.wide img { max-width: none; }
+  .hero { padding: 2.6rem 0 2.4rem; }
+  .bar .wrap { flex-direction: column; gap: 0.3rem; }
+  th:first-child, td:first-child { white-space: normal; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+@media print {
+  .bar, .copy, .cta, .skip { display: none; }
+  .sec h2 { position: static; }
+}

@@ -1,0 +1,7 @@
+import quadrant
+diagram priorities style=oreilly
+  quadrant w=400 h=300 xaxis="Effort" yaxis="Impact" q1="Big bets" q2="Quick wins" q3="Fill-ins" q4="Avoid"
+    dot "Website" x=0.25 y=0.8
+    dot "Mobile app" x=0.8 y=0.85
+    dot "Logo" x=0.2 y=0.25
+    dot "Full redesign" x=0.85 y=0.2

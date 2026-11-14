@@ -1,8 +1,8 @@
 # er: entity-relationship diagrams over `graph node=entity`. import er
 #
 #   graph node=entity
-#     Cliente "Cliente" keys="id\nnombre"
-#     Cliente -> tip=none "1..*" Pedido "Pedido" keys="id\nfecha"
+#     Customer "Customer" keys="id\nname"
+#     Customer -> tip=none "1..*" Order "Order" keys="id\ndate"
 #   an entity has a title and a list of attributes (keys="a\nb").
 import styles
 

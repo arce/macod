@@ -6,7 +6,7 @@ style oreilly
   box radius=8 sw=1.6 padx=14 pady=8
   arrow sw=2.5
 #line 2
-diagram grafo-cruces caption="graph ordena cada nivel para reducir cruces."
+diagram graph-crossings caption="graph orders each level to reduce crossings."
 #line 1
   col gap=40 align=center
     row gap=30 align=center

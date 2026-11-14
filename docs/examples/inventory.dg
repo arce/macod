@@ -1,0 +1,7 @@
+import styles
+diagram inventory style=silberschatz
+  datatable
+    Product, Stock, Status
+    Green tea, 12, ok
+    Coffee, 0, sold out
+    Honey, 5, ""

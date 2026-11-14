@@ -1,0 +1,8 @@
+import ui
+diagram signup style=ui
+  form id=p1 "Sign up" w=270
+    Name
+    Password *
+    v Country
+    [x] I accept the terms
+    > Create account

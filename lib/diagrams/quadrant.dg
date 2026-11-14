@@ -1,4 +1,4 @@
-# quadrant: a 2x2 chart with points whose x and y go from 0 to 1. import quadrant
+# quadrant: a 2x2 diagram with points whose x and y go from 0 to 1. import quadrant
 #
 #   quadrant [w=400 h=300 xaxis="Effort" yaxis="Impact" q1="Quick wins" q2="Big bets" q3="Fill-ins" q4="Money pit"]
 #     dot "Name" x=0.3 y=0.8

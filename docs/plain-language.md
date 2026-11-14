@@ -1,12 +1,12 @@
 # The plain language
 
-The plain language is the small text format that `textod` draws. Programs that expand richer languages (macros, data, charts) write it, and `textod` reads it. This document fixes what it is.
+The plain language is the small text format that `textod` draws. Programs that expand richer languages (macros, data, modules) write it, and `textod` reads it. This document fixes what it is.
 
 ## Vocabulary
 
 - Elements: `box text spacer shape label rect row col grid canvas group line arrow callout ellipse path poly set`.
 - `style` blocks, `diagram`, and connectors such as `a.bottom -> b.top`.
-- Nothing else: no `def`, `data`, `repeat`, `if`, `content`, `include`, and no modules (`graph`, `tree`, `sequence`, `datatable`, `form`) or `chart`.
+- Nothing else: no `def`, `data`, `repeat`, `if`, `content`, `include`, and no modules (`graph`, `tree`, `sequence`, `datatable`, `form`).
 
 ## Rules
 

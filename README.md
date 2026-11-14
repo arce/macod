@@ -6,6 +6,8 @@ Expands the **full language** (macros, data, modules) into **plain language**. I
 macod INPUT.dg | textod - -o OUTPUT.svg
 ```
 
+Website: <https://arce.github.io/macod/> (the page in [docs/index.html](docs/index.html)).
+
 ## What it adds over textod
 
 - `def` (components with parameters and `content`), `data`, `repeat`, `if`, `include`.
@@ -46,7 +48,9 @@ macod INPUT.dg [-o OUTPUT.dg] [-L DIR]...
 | `--libs` | list the libraries built into the program |
 | `-h`, `--help` / `--version` | help / version |
 
-Libraries are searched in: the input file's directory, the `-L` directories, then the built-in ones.
+Libraries are searched in: the input file's directory, the `-L` directories, then the built-in ones. Do not name your file like a library: a `kanban.dg` that runs `import kanban` would import itself.
+
+`macod` checks the macros and modules; it does not check the drawing vocabulary. An unknown element goes through and `textod` reports it, with the line of your file.
 
 ## The plain-language output
 
@@ -58,10 +62,23 @@ Libraries are searched in: the input file's directory, the `-L` directories, the
 - **Stable.** Expanding the plain text again leaves it unchanged.
 - **Same drawing.** Rendering `macod`'s output gives the same SVG as the full language engine.
 
+## Documentation
+
+- [docs/DSL.md](docs/DSL.md): the full language.
+- [docs/plain-language.md](docs/plain-language.md): the plain language that `macod` writes.
+- [docs/examples](docs/examples): the `.dg` files of the website; their results are in [docs/img](docs/img).
+
 ## Build
 
 ```
-make
+make            # builds build/macod
+make test       # unit tests and the examples
+make install    # installs into /usr/local/bin (PREFIX=... to change it)
+make clean      # removes build/
 ```
 
-The program name is set with `-DPROGRAM`. It embeds the libraries for macros and components. Requires a C++17 compiler and Python 3.
+The program name is set with `-DPROGRAM`. It embeds the libraries for macros and components. Requires a C++17 compiler and Python 3 (only to embed the libraries).
+
+`macod` uses only the C++ standard library: it does not contain or link any `textod` code. `textod` is a separate program that reads the text `macod` writes.
+
+The images of the website are made with `macod X.dg | textod - -o X.svg` for each file in `docs/examples`.

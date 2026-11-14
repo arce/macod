@@ -1,0 +1,16 @@
+import styles
+def person name role
+  box $id w=130 align=center
+    text "$name" bold
+    text "$role" size=10
+
+data team name, role
+  Ana, Design
+  Luis, Backend
+  Marta, QA
+  Paul, Data
+
+diagram team style=oreilly
+  row gap=18
+    repeat team
+      person "$name" "$role"

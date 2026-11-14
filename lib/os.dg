@@ -1,4 +1,4 @@
-# so: figures of the operating-systems textbook. import so
+# os: figures of the operating-systems textbook. import os
 #
 #   oval ID ["text"] [w= h= fill=]            an ellipse with its text (a step, a file...)
 #   cloud ID ["text"] [w= h= fill=]           a cloud (an application, a system call)

@@ -1,0 +1,9 @@
+import styles
+diagram empty-cell (
+    caption="datatable: an empty cell is written with quotes."
+)
+  datatable
+    Product, Stock, Note
+    Green tea, 12, ""
+    Coffee, 0, "sold out"
+    Honey, 5, ""

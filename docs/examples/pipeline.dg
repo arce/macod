@@ -1,0 +1,4 @@
+import styles
+diagram pipeline style=oreilly
+  graph direction=right gap=40
+    a "You write\nthe .dg" light -> b "macod" -> c "Plain\nlanguage" -> d "SVG" light

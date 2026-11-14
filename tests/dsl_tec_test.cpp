@@ -8,7 +8,7 @@ static string err(const string& t, DSL::Resolver r = nullptr) {
   return "ok";
 }
 int main() {
-  EQ(DSL::show(DSL::parse("a 1 \"x y\" k=v q=\"a b\" ==> --> x=#fff # nota\n  b\n  c; d\n    e\nf")),
+  EQ(DSL::show(DSL::parse("a 1 \"x y\" k=v q=\"a b\" ==> --> x=#fff # note\n  b\n  c; d\n    e\nf")),
      string("a 1 \"x y\" k=v q=\"a b\" ==> --> x=\"#fff\"\n  b\n  c\n  d\n    e\nf\n"));
   EQ(DSL::show(DSL::parse("a \"q\\\"z\\n\"\n\n  # solo comentario\n  b")), string("a \"q\\\"z\\n\"\n  b\n"));
   EQ(err("a\n\tb"), string("line 2: tabs are not allowed in the indentation"));
@@ -28,28 +28,28 @@ int main() {
   }
 
   string src =
-    "data producto nombre precio\n"
-    "  Teclado, $45\n"
-    "  Raton, $20\n  \"Monitor, 24\", $210\n"
-    "def tarjeta titulo precio destacado\n"
+    "data product name price\n"
+    "  Keyboard, $45\n"
+    "  Mouse, $20\n  \"Monitor, 24\", $210\n"
+    "def tile title price featured\n"
     "  card id=$id\n"
-    "    text $titulo bold\n"
-    "    text $precio\n"
-    "    if destacado\n"
-    "      note \"Mas vendido\"\n"
+    "    text $title bold\n"
+    "    text $price\n"
+    "    if featured\n"
+    "      note \"Best seller\"\n"
     "    content\n"
-    "screen catalogo\n"
+    "screen catalog\n"
     "  row\n"
-    "    repeat producto\n"
-    "      tarjeta $nombre $precio\n"
-    "        button \"Comprar\"\n"
-    "    tarjeta \"Solo\" \"$1\" destacado id=z width=50\n";
+    "    repeat product\n"
+    "      tile $name $price\n"
+    "        button \"Buy\"\n"
+    "    tile \"Single\" \"$1\" featured id=z width=50\n";
   EQ(DSL::show(DSL::compile(src)),
-     string("screen catalogo\n  row\n"
-            "    card id=_1\n      text Teclado bold\n      text $45\n      button \"Comprar\"\n"
-            "    card id=_2\n      text Raton bold\n      text $20\n      button \"Comprar\"\n"
-            "    card id=_3\n      text \"Monitor, 24\" bold\n      text $210\n      button \"Comprar\"\n"
-            "    card id=z width=50\n      text Solo bold\n      text $1\n      note \"Mas vendido\"\n"));
+     string("screen catalog\n  row\n"
+            "    card id=_1\n      text Keyboard bold\n      text $45\n      button \"Buy\"\n"
+            "    card id=_2\n      text Mouse bold\n      text $20\n      button \"Buy\"\n"
+            "    card id=_3\n      text \"Monitor, 24\" bold\n      text $210\n      button \"Buy\"\n"
+            "    card id=z width=50\n      text Single bold\n      text $1\n      note \"Best seller\"\n"));
   EQ(DSL::show(DSL::compile("def p\n  $id-a -> $id-b\np id=x")), string("x-a -> x-b\n"));
   EQ(DSL::show(DSL::compile("repeat n=3 var=k\n  x $k\nrepeat n=2\n  y $i")), string("x 0\nx 1\nx 2\ny 0\ny 1\n"));
   EQ(DSL::show(DSL::compile("data d a b\n  1\nrepeat d n=2\n  r $a $b $i")), string("r 1 \"b 1\" 0\nr 1 \"b 2\" 1\n"));
@@ -74,7 +74,7 @@ int main() {
   EQ(err("import c", lib), string("line 1: library 'c', line 1: library 'd', line 1: import 'c': the libraries import each other"));
   EQ(err("x\nimport bad", lib), string("line 2: library 'bad', line 3: only 'def' and 'import' go in a library"));
   EQ(err("repeat prod\n  x", lib), string("line 1: repeat: there is no data named 'prod'"));
-  EQ(err("data producto a\nrepeat produto\n  x"), string("line 2: repeat: there is no data named 'produto' (did you mean 'producto'?)"));
+  EQ(err("data product a\nrepeat produt\n  x"), string("line 2: repeat: there is no data named 'produt' (did you mean 'product'?)"));
   EQ(err("repeat n=999\n  x"), string("line 1: repeat: n must be between 0 and 200"));
   EQ(err("repeat\n  x"), string("line 1: repeat: give a data name or n="));
   EQ(err("def a\n  a\na"), string("line 3: the components nest too deep"));

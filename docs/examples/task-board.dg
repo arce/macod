@@ -1,0 +1,10 @@
+import kanban
+diagram task-board style=ui
+  board
+    lane "To do" w=180
+      card "Design homepage" tag="UX"
+      card "Write guide" tag="Docs" c=warning
+    lane "In progress" w=180
+      card "Test macod" tag="QA"
+    lane "Done" w=180
+      card "Publish site" tag="Web" c=success

@@ -1,0 +1,11 @@
+import styles
+diagram hierarchy style=oreilly
+  tree
+    ceo "Management" light
+      tec "Technology"
+        dev "Development"
+        ops "Operations"
+      com "Commercial"
+        sal "Sales"
+        mkt "Marketing"
+      fin "Finance"

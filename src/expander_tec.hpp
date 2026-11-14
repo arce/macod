@@ -153,8 +153,8 @@ class Expander {
     expand(kids, P, out, depth, slot, ln);
   }
 
-  // Enlaces `-> destino` puestos en un uso de def (button, link, card...) y
-  // diagramas ya vistos, para incrustarlos con `screen id=NOMBRE`.
+  // Links `-> destination` placed in a use of a def (button, link, card...) and
+  // diagrams already seen, to embed them with `screen id=NAME`.
   struct Link { std::string src, dest, label, from; int line; };
   std::vector<Link> links;
   std::vector<std::string> scr;  // the embedded screens being expanded: where a link starts
@@ -184,8 +184,8 @@ class Expander {
     for (auto& k : d.kids) screensIn(k, o);
     return o;
   }
-  // `screen id=OTRO` sin contenido ni texto, donde OTRO es un diagrama anterior,
-  // se sustituye por el contenido de ese diagrama.
+  // A `screen id=OTHER` with no content or text, where OTHER is an earlier diagram,
+  // is replaced by the content of that diagram.
   void embed(Nodes& kids) {
     for (auto& k : kids) {
       std::string id = k.attr("id");

@@ -1,6 +1,6 @@
 import glob, os, sys
 lib, out = sys.argv[1], sys.argv[2]
-# embed.py LIB SALIDA [carpetas a omitir...]   (o: --only nombres...  solo esas carpetas/archivos de lib)
+# embed.py LIB OUTPUT [folders to skip...]   (or: --only names...  only those folders/files of lib)
 rest = sys.argv[3:]
 only = set(rest[1:]) if rest[:1] == ["--only"] else None
 skip = set() if only is not None else set(rest)

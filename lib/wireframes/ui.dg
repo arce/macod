@@ -317,33 +317,3 @@ def progress pct
   shape grow h=10
     rect y=1 w=w h=8 r=4 fill=bar stroke=border sw=1
     rect y=1 w=w*$pct/100 h=8 r=4 fill=primary stroke=primary sw=1
-
-def chart title kind="line" height="90"
-  col gap=4 align=fill
-    text "$title" bold grow h=14
-    shape grow h=$height
-      rect r=4 fill=surface stroke=border sw=1
-      path d="M 12 8 L 12 h-12 L w-8 h-12" stroke=border sw=1
-      if kind is line
-        path (
-            d="M 12 h*0.7 L w*0.3 h*0.45 L w*0.5 h*0.6 L w*0.7 " &
-                "h*0.25 L w-12 h*0.35"
-            stroke=primary sw=2
-        )
-      if kind is bar
-        rect (
-            x=w*0.15 y=h*0.5 w=w*0.1 h=h*0.5-12 fill=primary stroke=primary
-            sw=1
-        )
-        rect (
-            x=w*0.35 y=h*0.3 w=w*0.1 h=h*0.7-12 fill=primary stroke=primary
-            sw=1
-        )
-        rect (
-            x=w*0.55 y=h*0.6 w=w*0.1 h=h*0.4-12 fill=primary stroke=primary
-            sw=1
-        )
-        rect (
-            x=w*0.75 y=h*0.2 w=w*0.1 h=h*0.8-12 fill=primary stroke=primary
-            sw=1
-        )

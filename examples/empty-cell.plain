@@ -6,18 +6,18 @@ style oreilly
   box radius=8 sw=1.6 padx=14 pady=8
   arrow sw=2.5
 #line 2
-diagram tabla-vacia caption="datatable: una celda vacía se escribe con comillas."
+diagram empty-cell caption="datatable: an empty cell is written with quotes."
 #line 1
   grid cols=3 gap=0 align=stretch
-    box "Producto" sw=1 radius=0 light bold
+    box "Product" sw=1 radius=0 light bold
     box "Stock" sw=1 radius=0 light bold
-    box "Nota" sw=1 radius=0 light bold
-    box "Té verde" sw=1 radius=0
+    box "Note" sw=1 radius=0 light bold
+    box "Green tea" sw=1 radius=0
     box "12" sw=1 radius=0
     box "" sw=1 radius=0
-    box "Café" sw=1 radius=0
+    box "Coffee" sw=1 radius=0
     box "0" sw=1 radius=0
-    box "agotado" sw=1 radius=0
-    box "Miel" sw=1 radius=0
+    box "sold out" sw=1 radius=0
+    box "Honey" sw=1 radius=0
     box "5" sw=1 radius=0
     box "" sw=1 radius=0

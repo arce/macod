@@ -24,7 +24,7 @@ int main() {
   EQ(err("diagram d\n  repeat n=2\n    box\n"), string("ok"));  // the plain level does not look inside a diagram: textod rejects it when it draws
   EQ(err("data t a\n  1\n"), string("line 1: 'data' needs the expander module, which is not loaded"));
   EQ(err("import comp\n", lib), string("line 1: import 'comp': the library has more than styles, it needs the expander module, which is not loaded"));
-  EQ(err("import nada\n", lib), string("line 1: import 'nada': no such library"));
+  EQ(err("import nothing\n", lib), string("line 1: import 'nothing': no such library"));
   // #line N
   auto n = DSL::parse("a\n#line 10\nb\nc\n#line 3\nd");
   EQ(to_string(n.kids[0].line) + "," + to_string(n.kids[1].line) + "," + to_string(n.kids[2].line) + "," + to_string(n.kids[3].line), string("1,10,11,3"));

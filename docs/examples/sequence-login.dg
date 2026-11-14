@@ -1,0 +1,10 @@
+import styles
+diagram sequence-login style=oreilly
+  sequence
+    u "User"
+    s "Server"
+    d "Database"
+    u -> s "login"
+    s -> d "query"
+    d --> s "user"
+    s --> u "token"

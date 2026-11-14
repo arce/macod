@@ -4,7 +4,7 @@
 #     part WHO "Label" n=0 [w=110 end=300]       a participant in column n (170 pt apart); end: where its lifeline stops
 #     msg FROM TO "text" n=1 [dash="6 4"]       a message on row n (44 pt apart)
 #
-# with `data` and `repeat` the participants and messages come from tables (see dg/secuencia-dg.dg).
+# with `data` and `repeat` the participants and messages come from tables (or use the `sequence` macro).
 import styles
 
 def part who label n="0" w="110" end="300"

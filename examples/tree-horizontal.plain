@@ -6,21 +6,21 @@ style oreilly
   box radius=8 sw=1.6 padx=14 pady=8
   arrow sw=2.5
 #line 2
-diagram arbol-horizontal caption="tree direction=right"
+diagram tree-horizontal caption="tree direction=right"
 #line 1
   row gap=36 align=center
-    box raiz "Sistema" light
+    box root "System" light
     col gap=20 align=start
       row gap=36 align=center
-        box a "Documentos"
+        box a "Documents"
         col gap=20 align=start
           row gap=36 align=center
-            box a1 "Informes"
+            box a1 "Reports"
           row gap=36 align=center
-            box a2 "Cartas"
+            box a2 "Letters"
       row gap=36 align=center
-        box b "Imágenes"
+        box b "Images"
   a.right -> a1.left elbow
   a.right -> a2.left elbow
-  raiz.right -> a.left elbow
-  raiz.right -> b.left elbow
+  root.right -> a.left elbow
+  root.right -> b.left elbow

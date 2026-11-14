@@ -1,0 +1,10 @@
+import styles
+diagram tree caption="tree: the hierarchy comes from the indentation."
+  tree
+    root "System" light
+      a "Documents"
+        a1 "Reports"
+        a2 "Letters"
+      b "Images"
+      c "Music"
+        c1 "Rock"

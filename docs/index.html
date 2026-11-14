@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>macod: diagrams written as text</title>
+<meta name="description" content="macod expands components, data tables and modules like graph, tree or form into a plain diagram language. Advantages, examples and usage.">
+<meta property="og:title" content="macod: diagrams written as text">
+<meta property="og:description" content="Describe the diagram as text and let macod expand the repetitive parts.">
+<meta property="og:type" content="website">
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="mark" href="#top">macod</a>
+    <nav aria-label="Sections">
+      <a href="#advantages">Advantages</a>
+      <a href="#how-it-works">How it works</a>
+      <a href="#examples">Examples</a>
+      <a href="#usage">Usage</a>
+      <a href="https://github.com/arce/macod">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main id="content">
+
+<section class="hero" id="top">
+  <div class="wrap">
+    <h1><span>Write the idea of the diagram.</span> <span>macod expands the rest.</span></h1>
+    <p class="lead">macod reads a language with components, data tables and modules like <code>graph</code>, <code>tree</code> or <code>form</code>, and writes the plain language that <a href="https://github.com/arce/textod">textod</a> draws as SVG.</p>
+    <div class="cta">
+      <a class="btn" href="#examples">See the examples</a>
+      <a href="https://github.com/arce/macod">Code on GitHub</a>
+    </div>
+    <div class="demo">
+      <figure class="listing " id="listing-team"><figcaption><span><b>Listing&nbsp;1.</b> <code>team.dg</code></span><button class="copy" type="button" data-src="import styles
+def person name role
+  box $id w=130 align=center
+    text &quot;$name&quot; bold
+    text &quot;$role&quot; size=10
+
+data team name, role
+  Ana, Design
+  Luis, Backend
+  Marta, QA
+  Paul, Data
+
+diagram team style=oreilly
+  row gap=18
+    repeat team
+      person &quot;$name&quot; &quot;$role&quot;
+">Copy</button></figcaption><pre tabindex="0" role="region" aria-label="Listing 1"><code><span class="l"><span class="k">import</span> styles</span><span class="l"><span class="k">def</span> person name role</span><span class="l">  box <span class="v">$id</span> <span class="a">w</span>=130 <span class="a">align</span>=center</span><span class="l">    text <span class="s">"<span class="v">$name</span>"</span> bold</span><span class="l">    text <span class="s">"<span class="v">$role</span>"</span> <span class="a">size</span>=10</span><span class="l"></span><span class="l"><span class="k">data</span> team name, role</span><span class="l">  Ana, Design</span><span class="l">  Luis, Backend</span><span class="l">  Marta, QA</span><span class="l">  Paul, Data</span><span class="l"></span><span class="l">diagram team <span class="a">style</span>=oreilly</span><span class="l">  row <span class="a">gap</span>=18</span><span class="l">    <span class="k">repeat</span> team</span><span class="l">      person <span class="s">"<span class="v">$name</span>"</span> <span class="s">"<span class="v">$role</span>"</span></span></code></pre></figure>
+      <div>
+        <pre class="shell"><code>macod team.dg | textod - -o team.svg</code></pre>
+        <figure class="fig " id="fig-team"><img src="img/team.svg" width="586" height="72.5" alt="Four cards in a row with the names Ana, Luis, Marta and Paul and their role below each."><figcaption><b>Figure&nbsp;1.</b> Four cards come from one definition and a four-row table.</figcaption></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="advantages">
+  <div class="wrap">
+    <h2>Advantages</h2>
+    <div class="body">
+      <p>A program that expands a diagram language before drawing it makes sense when diagrams change, repeat or come from data. This is what you gain by working this way.</p>
+      <dl class="pros"><div class="pro"><dt>The diagram is text</dt><dd>It lives in git next to the code. A change shows up line by line in a pull request and is reviewed like any other; there is no binary file or graphical editor in between.</dd></div><div class="pro"><dt>Repeated things are written once</dt><dd>A <code>def</code> defines a component and <code>repeat</code> uses it with each row of a <code>data</code> table. Change the definition and every copy changes: in <a href="#fig-team-updated">figure&nbsp;3</a>, one word, <code>light</code>, tinted all five cards.</dd></div><div class="pro"><dt>Data lives apart from the drawing</dt><dd>The rows of <code>data</code> (or of a CSV) generate cards, table rows or screens. To update the diagram you update the data: adding Sophie in <a href="#fig-team-updated">figure&nbsp;3</a> meant adding one line.</dd></div><div class="pro"><dt>You don't calculate coordinates</dt><dd><code>graph</code>, <code>tree</code> and <code>sequence</code> order the levels, reduce crossings and route the arrows. You describe relationships, as in figures 4, 6 and 7, and the position comes out by itself.</dd></div><div class="pro"><dt>Libraries for the usual diagrams</dt><dd>UML, entity-relationship, states, use cases, kanban, timelines, quadrants, packet fields and screen components. They ship inside the executable; <code>macod --libs</code> lists them.</dd></div><div class="pro"><dt>The result is stable</dt><dd>The same text always gives the same output, with the same generated identifiers, and expanding that output again does not change it. That keeps diffs clean and makes it usable in continuous integration.</dd></div><div class="pro"><dt>Errors point to your file</dt><dd>Expanding loses line numbers. macod writes <code>#line N</code> to keep them, and textod quotes the line of the file you wrote, not the one of the intermediate text.</dd></div><div class="pro"><dt>It is small and has no dependencies</dt><dd>A C++17 executable that only uses the standard library. It reads a file or standard input and writes to standard output, so it chains with any command-line tool.</dd></div></dl>
+      <p class="note">For a one-off, free-form drawing where every stroke matters, a graphical editor is still more direct. macod pays off when the diagram repeats, is versioned or comes from data.</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="how-it-works">
+  <div class="wrap">
+    <h2>How it works</h2>
+    <div class="body">
+      <p>macod does one thing: it turns the full language into <em>plain language</em>, a text that only knows boxes, rows, columns and arrows. It does not draw; textod does that. The <a href="#fig-pipeline">figure&nbsp;2</a> shows the path.</p>
+      <figure class="fig fig-wide" id="fig-pipeline"><img src="img/pipeline.svg" width="458.32" height="68" alt="A chain of four boxes joined by arrows: You write the .dg, macod, Plain language and SVG."><figcaption><b>Figure&nbsp;2.</b> The whole path: you write the .dg, macod expands it and textod draws it.</figcaption></figure>
+      <p>Because they are two programs joined by a pipe, you can look at what is in between. With listing&nbsp;1 above, <code>macod team.dg</code> prints listing&nbsp;2:</p>
+      <figure class="listing scroll" id="listing-plain"><figcaption><span><b>Listing&nbsp;2.</b> output of <code>macod team.dg</code></span><button class="copy" type="button" data-src="style silberschatz
+  box radius=0 sw=1.3 padx=8 pady=4
+  arrow sw=1.3 italic
+#line 5
+style oreilly
+  box radius=8 sw=1.6 padx=14 pady=8
+  arrow sw=2.5
+#line 13
+diagram team style=oreilly
+  row gap=18
+#line 16
+    box id=_1 w=130 align=center
+#line 16
+      text &quot;Ana&quot; bold
+#line 16
+      text &quot;Design&quot; size=10
+#line 16
+    box id=_2 w=130 align=center
+#line 16
+      text &quot;Luis&quot; bold
+#line 16
+      text &quot;Backend&quot; size=10
+#line 16
+    box id=_3 w=130 align=center
+#line 16
+      text &quot;Marta&quot; bold
+#line 16
+      text &quot;QA&quot; size=10
+#line 16
+    box id=_4 w=130 align=center
+#line 16
+      text &quot;Paul&quot; bold
+#line 16
+      text &quot;Data&quot; size=10
+">Copy</button></figcaption><pre tabindex="0" role="region" aria-label="Listing 2"><code><span class="l">style silberschatz</span><span class="l">  box <span class="a">radius</span>=0 <span class="a">sw</span>=1.3 <span class="a">padx</span>=8 <span class="a">pady</span>=4</span><span class="l">  arrow <span class="a">sw</span>=1.3 italic</span><span class="l"><span class="d">#line 5</span></span><span class="l">style oreilly</span><span class="l">  box <span class="a">radius</span>=8 <span class="a">sw</span>=1.6 <span class="a">padx</span>=14 <span class="a">pady</span>=8</span><span class="l">  arrow <span class="a">sw</span>=2.5</span><span class="l"><span class="d">#line 13</span></span><span class="l">diagram team <span class="a">style</span>=oreilly</span><span class="l">  row <span class="a">gap</span>=18</span><span class="l"><span class="d">#line 16</span></span><span class="l">    box <span class="a">id</span>=_1 <span class="a">w</span>=130 <span class="a">align</span>=center</span><span class="l"><span class="d">#line 16</span></span><span class="l">      text <span class="s">"Ana"</span> bold</span><span class="l"><span class="d">#line 16</span></span><span class="l">      text <span class="s">"Design"</span> <span class="a">size</span>=10</span><span class="l"><span class="d">#line 16</span></span><span class="l">    box <span class="a">id</span>=_2 <span class="a">w</span>=130 <span class="a">align</span>=center</span><span class="l"><span class="d">#line 16</span></span><span class="l">      text <span class="s">"Luis"</span> bold</span><span class="l"><span class="d">#line 16</span></span><span class="l">      text <span class="s">"Backend"</span> <span class="a">size</span>=10</span><span class="l"><span class="d">#line 16</span></span><span class="l">    box <span class="a">id</span>=_3 <span class="a">w</span>=130 <span class="a">align</span>=center</span><span class="l"><span class="d">#line 16</span></span><span class="l">      text <span class="s">"Marta"</span> bold</span><span class="l"><span class="d">#line 16</span></span><span class="l">      text <span class="s">"QA"</span> <span class="a">size</span>=10</span><span class="l"><span class="d">#line 16</span></span><span class="l">    box <span class="a">id</span>=_4 <span class="a">w</span>=130 <span class="a">align</span>=center</span><span class="l"><span class="d">#line 16</span></span><span class="l">      text <span class="s">"Paul"</span> bold</span><span class="l"><span class="d">#line 16</span></span><span class="l">      text <span class="s">"Data"</span> <span class="a">size</span>=10</span></code></pre></figure>
+      <p>The four cards are now four <code>box</code> elements. No <code>def</code>, <code>data</code> or <code>repeat</code> is left: everything in blue in listing&nbsp;1 is gone. Each node carries a <code>#line 16</code>, the line of the <code>.dg</code> where the card was used, so errors point at your file.</p>
+      <h3>Change the definition, add a data row</h3>
+      <p>This is what expansion buys you. In listing&nbsp;3 the card was marked <code>light</code> and a row was added to the table. The drawing was not touched.</p>
+      <figure class="listing " id="listing-updated"><figcaption><span><b>Listing&nbsp;3.</b> <code>team-updated.dg</code>, with two lines changed</span><button class="copy" type="button" data-src="import styles
+def person name role
+  box $id w=130 align=center light
+    text &quot;$name&quot; bold
+    text &quot;$role&quot; size=10
+
+data team name, role
+  Ana, Design
+  Luis, Backend
+  Marta, QA
+  Paul, Data
+  Sophie, Support
+
+diagram team style=oreilly
+  row gap=18
+    repeat team
+      person &quot;$name&quot; &quot;$role&quot;
+">Copy</button></figcaption><pre tabindex="0" role="region" aria-label="Listing 3"><code><span class="l"><span class="k">import</span> styles</span><span class="l"><span class="k">def</span> person name role</span><span class="l hl">  box <span class="v">$id</span> <span class="a">w</span>=130 <span class="a">align</span>=center light</span><span class="l">    text <span class="s">"<span class="v">$name</span>"</span> bold</span><span class="l">    text <span class="s">"<span class="v">$role</span>"</span> <span class="a">size</span>=10</span><span class="l"></span><span class="l"><span class="k">data</span> team name, role</span><span class="l">  Ana, Design</span><span class="l">  Luis, Backend</span><span class="l">  Marta, QA</span><span class="l">  Paul, Data</span><span class="l hl">  Sophie, Support</span><span class="l"></span><span class="l">diagram team <span class="a">style</span>=oreilly</span><span class="l">  row <span class="a">gap</span>=18</span><span class="l">    <span class="k">repeat</span> team</span><span class="l">      person <span class="s">"<span class="v">$name</span>"</span> <span class="s">"<span class="v">$role</span>"</span></span></code></pre></figure>
+      <figure class="fig  wide" id="fig-team-updated"><img src="img/team-updated.svg" width="734" height="72.5" alt="Five cards with a light blue fill: Ana, Luis, Marta, Paul and Sophie, with their role below each."><figcaption><b>Figure&nbsp;3.</b> Two lines changed in listing 3, and the same definition gives five blue cards.</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="examples">
+  <div class="wrap">
+    <h2>Examples</h2>
+    <div class="body">
+      <p>Each example is a real <code>.dg</code> file, expanded with macod and drawn with textod. The files are in <a href="https://github.com/arce/macod/tree/main/docs/examples"><code>docs/examples</code></a>.</p>
+      <ul class="index"><li><a href="#hierarchy">Hierarchy</a></li><li><a href="#class-diagram">UML classes</a></li><li><a href="#state-machine">State machine</a></li><li><a href="#sequence-login">Sequence diagram</a></li><li><a href="#task-board">Kanban board</a></li><li><a href="#signup-form">Form screen</a></li><li><a href="#roadmap">Timeline</a></li><li><a href="#priorities">Priority quadrant</a></li><li><a href="#inventory">Data table</a></li></ul>
+      <h3 id="hierarchy">Hierarchy</h3><div class="plate"><p>The <code>tree</code> macro: the hierarchy comes from the indentation. You write one node per line and macod computes the rows, the columns and the connectors.</p><figure class="listing "><figcaption><span><b>Listing&nbsp;4.</b> <code>hierarchy.dg</code></span><button class="copy" type="button" data-src="import styles
+diagram hierarchy style=oreilly
+  tree
+    ceo &quot;Management&quot; light
+      tec &quot;Technology&quot;
+        dev &quot;Development&quot;
+        ops &quot;Operations&quot;
+      com &quot;Commercial&quot;
+        sal &quot;Sales&quot;
+        mkt &quot;Marketing&quot;
+      fin &quot;Finance&quot;
+">Copy</button></figcaption><pre tabindex="0" role="region" aria-label="Listing 4"><code><span class="l"><span class="k">import</span> styles</span><span class="l">diagram hierarchy <span class="a">style</span>=oreilly</span><span class="l">  <span class="k">tree</span></span><span class="l">    ceo <span class="s">"Management"</span> light</span><span class="l">      tec <span class="s">"Technology"</span></span><span class="l">        dev <span class="s">"Development"</span></span><span class="l">        ops <span class="s">"Operations"</span></span><span class="l">      com <span class="s">"Commercial"</span></span><span class="l">        sal <span class="s">"Sales"</span></span><span class="l">        mkt <span class="s">"Marketing"</span></span><span class="l">      fin <span class="s">"Finance"</span></span></code></pre></figure><figure class="fig " id="fig-hierarchy" style="--w:571.68px"><img src="img/hierarchy.svg" width="571.68" height="192" alt="An organization hierarchy with Management at the top and three branches: Technology with Development and Operations, Commercial with Sales and Marketing, and Finance."><figcaption><b>Figure&nbsp;4.</b> Eight nodes and seven connectors, not a single coordinate.</figcaption></figure></div><h3 id="class-diagram">UML classes</h3><div class="plate"><p>With <code>import uml</code> and <code>graph node=cls</code>, each node is a class with up to three compartments. Inheritance is an arrow with <code>tail=hollow</code>; the parent is written first so it ends up on top.</p><figure class="listing "><figcaption><span><b>Listing&nbsp;5.</b> <code>class-diagram.dg</code></span><button class="copy" type="button" data-src="import uml
+diagram class-diagram style=silberschatz
+  graph node=cls gap=60
+    Animal &quot;Animal&quot; attrs=&quot;+name: String\n+age: int&quot; ops=&quot;+eat()\n+sleep()&quot;
+    Animal -&gt; tip=none tail=hollow Dog &quot;Dog&quot; attrs=&quot;+breed: String&quot; ops=&quot;+bark()&quot;
+    Animal -&gt; tip=none tail=hollow Cat &quot;Cat&quot; attrs=&quot;+indoor: bool&quot; ops=&quot;+meow()&quot;
+">Copy</button></figcaption><pre tabindex="0" role="region" aria-label="Listing 5"><code><span class="l"><span class="k">import</span> uml</span><span class="l">diagram class-diagram <span class="a">style</span>=silberschatz</span><span class="l">  <span class="k">graph</span> <span class="a">node</span>=cls <span class="a">gap</span>=60</span><span class="l">    Animal <span class="s">"Animal"</span> <span class="a">attrs</span>=<span class="s">"+name: String\n+age: int"</span> <span class="a">ops</span>=<span class="s">"+eat()\n+sleep()"</span></span><span class="l">    Animal <span class="ar">-&gt;</span> <span class="a">tip</span>=none <span class="a">tail</span>=hollow Dog <span class="s">"Dog"</span> <span class="a">attrs</span>=<span class="s">"+breed: String"</span> <span class="a">ops</span>=<span class="s">"+bark()"</span></span><span class="l">    Animal <span class="ar">-&gt;</span> <span class="a">tip</span>=none <span class="a">tail</span>=hollow Cat <span class="s">"Cat"</span> <span class="a">attrs</span>=<span class="s">"+indoor: bool"</span> <span class="a">ops</span>=<span class="s">"+meow()"</span></span></code></pre></figure><figure class="fig " id="fig-class-diagram" style="--w:275.89px"><img src="img/class-diagram.svg" width="275.89" height="316" alt="A UML class diagram: Animal, with its attributes and operations, and two subclasses, Dog and Cat, joined by inheritance arrows."><figcaption><b>Figure&nbsp;5.</b> The hollow-headed arrow goes from each subclass to Animal.</figcaption></figure></div><h3 id="state-machine">State machine</h3><div class="plate"><p>With <code>import state</code> and <code>graph node=st</code>. The filled circle marks the start (<code>kind=start</code>) and the double circle the end (<code>kind=end</code>). The quoted text before the target is the label of the transition.</p><figure class="listing "><figcaption><span><b>Listing&nbsp;6.</b> <code>state-machine.dg</code></span><button class="copy" type="button" data-src="import state
+diagram state-machine style=oreilly
+  graph node=st direction=right gap=170
+    start &quot;&quot; kind=start
+    end &quot;&quot; kind=end
+    pending &quot;Pending&quot;
+    paid &quot;Paid&quot;
+    shipped &quot;Shipped&quot;
+    start -&gt; pending
+    pending -&gt; &quot;pay&quot; paid
+    paid -&gt; &quot;ship&quot; shipped
+    shipped -&gt; &quot;deliver&quot; end
+">Copy</button></figcaption><pre tabindex="0" role="region" aria-label="Listing 6"><code><span class="l"><span class="k">import</span> state</span><span class="l">diagram state-machine <span class="a">style</span>=oreilly</span><span class="l">  <span class="k">graph</span> <span class="a">node</span>=st <span class="a">direction</span>=right <span class="a">gap</span>=170</span><span class="l">    start <span class="s">""</span> <span class="a">kind</span>=start</span><span class="l">    end <span class="s">""</span> <span class="a">kind</span>=end</span><span class="l">    pending <span class="s">"Pending"</span></span><span class="l">    paid <span class="s">"Paid"</span></span><span class="l">    shipped <span class="s">"Shipped"</span></span><span class="l">    start <span class="ar">-&gt;</span> pending</span><span class="l">    pending <span class="ar">-&gt;</span> <span class="s">"pay"</span> paid</span><span class="l">    paid <span class="ar">-&gt;</span> <span class="s">"ship"</span> shipped</span><span class="l">    shipped <span class="ar">-&gt;</span> <span class="s">"deliver"</span> end</span></code></pre></figure><figure class="fig  wide" id="fig-state-machine" style="--w:999.42px"><img src="img/state-machine.svg" width="999.42" height="58" alt="A state machine: a start point, the states Pending, Paid and Shipped, and an end point, joined by the transitions pay, ship and deliver."><figcaption><b>Figure&nbsp;6.</b> Four transitions; three have a label.</figcaption></figure></div><h3 id="sequence-login">Sequence diagram</h3><div class="plate"><p>The <code>sequence</code> macro declares the participants and then the messages, in the order they happen. <code>--&gt;</code> draws the response with a dotted line.</p><figure class="listing "><figcaption><span><b>Listing&nbsp;7.</b> <code>sequence-login.dg</code></span><button class="copy" type="button" data-src="import styles
+diagram sequence-login style=oreilly
+  sequence
+    u &quot;User&quot;
+    s &quot;Server&quot;
+    d &quot;Database&quot;
+    u -&gt; s &quot;login&quot;
+    s -&gt; d &quot;query&quot;
+    d --&gt; s &quot;user&quot;
+    s --&gt; u &quot;token&quot;
+">Copy</button></figcaption><pre tabindex="0" role="region" aria-label="Listing 7"><code><span class="l"><span class="k">import</span> styles</span><span class="l">diagram sequence-login <span class="a">style</span>=oreilly</span><span class="l">  <span class="k">sequence</span></span><span class="l">    u <span class="s">"User"</span></span><span class="l">    s <span class="s">"Server"</span></span><span class="l">    d <span class="s">"Database"</span></span><span class="l">    u <span class="ar">-&gt;</span> s <span class="s">"login"</span></span><span class="l">    s <span class="ar">-&gt;</span> d <span class="s">"query"</span></span><span class="l">    d <span class="ar">--&gt;</span> s <span class="s">"user"</span></span><span class="l">    s <span class="ar">--&gt;</span> u <span class="s">"token"</span></span></code></pre></figure><figure class="fig " id="fig-sequence-login" style="--w:432px"><img src="img/sequence-login.svg" width="432" height="270" alt="A sequence diagram between User, Server and Database, with the messages login, query, user and token."><figcaption><b>Figure&nbsp;7.</b> Messages stay in the order they are written.</figcaption></figure></div><h3 id="task-board">Kanban board</h3><div class="plate"><p>With <code>import kanban</code>: a <code>board</code> with lanes (<code>lane</code>) and cards (<code>card</code>). The tag and its color are parameters of the card.</p><figure class="listing "><figcaption><span><b>Listing&nbsp;8.</b> <code>task-board.dg</code></span><button class="copy" type="button" data-src="import kanban
+diagram task-board style=ui
+  board
+    lane &quot;To do&quot; w=180
+      card &quot;Design homepage&quot; tag=&quot;UX&quot;
+      card &quot;Write guide&quot; tag=&quot;Docs&quot; c=warning
+    lane &quot;In progress&quot; w=180
+      card &quot;Test macod&quot; tag=&quot;QA&quot;
+    lane &quot;Done&quot; w=180
+      card &quot;Publish site&quot; tag=&quot;Web&quot; c=success
+">Copy</button></figcaption><pre tabindex="0" role="region" aria-label="Listing 8"><code><span class="l"><span class="k">import</span> kanban</span><span class="l">diagram task-board <span class="a">style</span>=ui</span><span class="l">  board</span><span class="l">    lane <span class="s">"To do"</span> <span class="a">w</span>=180</span><span class="l">      card <span class="s">"Design homepage"</span> <span class="a">tag</span>=<span class="s">"UX"</span></span><span class="l">      card <span class="s">"Write guide"</span> <span class="a">tag</span>=<span class="s">"Docs"</span> <span class="a">c</span>=warning</span><span class="l">    lane <span class="s">"In progress"</span> <span class="a">w</span>=180</span><span class="l">      card <span class="s">"Test macod"</span> <span class="a">tag</span>=<span class="s">"QA"</span></span><span class="l">    lane <span class="s">"Done"</span> <span class="a">w</span>=180</span><span class="l">      card <span class="s">"Publish site"</span> <span class="a">tag</span>=<span class="s">"Web"</span> <span class="a">c</span>=success</span></code></pre></figure><figure class="fig " id="fig-task-board" style="--w:620px"><img src="img/task-board.svg" width="620" height="206" alt="A kanban board with three lanes: To do with two cards, In progress with one and Done with one."><figcaption><b>Figure&nbsp;8.</b> Three lanes and four cards.</figcaption></figure></div><h3 id="signup-form">Form screen</h3><div class="plate"><p>The <code>form</code> macro draws a screen with one line per element: field, secret field (<code>*</code>), select (<code>v</code>), checkbox (<code>[x]</code>) and button (<code>&gt;</code>).</p><figure class="listing "><figcaption><span><b>Listing&nbsp;9.</b> <code>signup-form.dg</code></span><button class="copy" type="button" data-src="import ui
+diagram signup style=ui
+  form id=p1 &quot;Sign up&quot; w=270
+    Name
+    Password *
+    v Country
+    [x] I accept the terms
+    &gt; Create account
+">Copy</button></figcaption><pre tabindex="0" role="region" aria-label="Listing 9"><code><span class="l"><span class="k">import</span> ui</span><span class="l">diagram signup <span class="a">style</span>=ui</span><span class="l">  <span class="k">form</span> <span class="a">id</span>=p1 <span class="s">"Sign up"</span> <span class="a">w</span>=270</span><span class="l">    Name</span><span class="l">    Password *</span><span class="l">    v Country</span><span class="l">    [x] I accept the terms</span><span class="l">    &gt; Create account</span></code></pre></figure><figure class="fig " id="fig-signup-form" style="--w:318px"><img src="img/signup-form.svg" width="318" height="248" alt="A sign-up screen with the fields Name, Password and Country, a checkbox to accept the terms and a Create account button."><figcaption><b>Figure&nbsp;9.</b> Five elements, five lines.</figcaption></figure></div><h3 id="roadmap">Timeline</h3><div class="plate"><p>With <code>import timeline</code>, each <code>event</code> takes a year or date, a text and an optional color.</p><figure class="listing "><figcaption><span><b>Listing&nbsp;10.</b> <code>roadmap.dg</code></span><button class="copy" type="button" data-src="import timeline
+diagram roadmap style=ui
+  timeline
+    event &quot;Jan&quot; &quot;Idea&quot; w=120
+    event &quot;Mar&quot; &quot;Prototype&quot; w=120 c=warning
+    event &quot;Jun&quot; &quot;Beta&quot; w=120
+    event &quot;Sep&quot; &quot;Version 1.0&quot; w=120 c=success
+">Copy</button></figcaption><pre tabindex="0" role="region" aria-label="Listing 10"><code><span class="l"><span class="k">import</span> timeline</span><span class="l">diagram roadmap <span class="a">style</span>=ui</span><span class="l">  timeline</span><span class="l">    event <span class="s">"Jan"</span> <span class="s">"Idea"</span> <span class="a">w</span>=120</span><span class="l">    event <span class="s">"Mar"</span> <span class="s">"Prototype"</span> <span class="a">w</span>=120 <span class="a">c</span>=warning</span><span class="l">    event <span class="s">"Jun"</span> <span class="s">"Beta"</span> <span class="a">w</span>=120</span><span class="l">    event <span class="s">"Sep"</span> <span class="s">"Version 1.0"</span> <span class="a">w</span>=120 <span class="a">c</span>=success</span></code></pre></figure><figure class="fig " id="fig-roadmap" style="--w:528px"><img src="img/roadmap.svg" width="528" height="104" alt="A timeline with four milestones: Jan, Idea; Mar, Prototype; Jun, Beta; Sep, Version 1.0."><figcaption><b>Figure&nbsp;10.</b> Four milestones; the color is the last parameter.</figcaption></figure></div><h3 id="priorities">Priority quadrant</h3><div class="plate"><p>With <code>import quadrant</code>. The names of the axes and of the four zones are parameters; each point is placed with <code>x</code> and <code>y</code> between 0 and 1.</p><figure class="listing "><figcaption><span><b>Listing&nbsp;11.</b> <code>priorities.dg</code></span><button class="copy" type="button" data-src="import quadrant
+diagram priorities style=oreilly
+  quadrant w=400 h=300 xaxis=&quot;Effort&quot; yaxis=&quot;Impact&quot; q1=&quot;Big bets&quot; q2=&quot;Quick wins&quot; q3=&quot;Fill-ins&quot; q4=&quot;Avoid&quot;
+    dot &quot;Website&quot; x=0.25 y=0.8
+    dot &quot;Mobile app&quot; x=0.8 y=0.85
+    dot &quot;Logo&quot; x=0.2 y=0.25
+    dot &quot;Full redesign&quot; x=0.85 y=0.2
+">Copy</button></figcaption><pre tabindex="0" role="region" aria-label="Listing 11"><code><span class="l"><span class="k">import</span> quadrant</span><span class="l">diagram priorities <span class="a">style</span>=oreilly</span><span class="l">  quadrant <span class="a">w</span>=400 <span class="a">h</span>=300 <span class="a">xaxis</span>=<span class="s">"Effort"</span> <span class="a">yaxis</span>=<span class="s">"Impact"</span> <span class="a">q1</span>=<span class="s">"Big bets"</span> <span class="a">q2</span>=<span class="s">"Quick wins"</span> <span class="a">q3</span>=<span class="s">"Fill-ins"</span> <span class="a">q4</span>=<span class="s">"Avoid"</span></span><span class="l">    dot <span class="s">"Website"</span> <span class="a">x</span>=0.25 <span class="a">y</span>=0.8</span><span class="l">    dot <span class="s">"Mobile app"</span> <span class="a">x</span>=0.8 <span class="a">y</span>=0.85</span><span class="l">    dot <span class="s">"Logo"</span> <span class="a">x</span>=0.2 <span class="a">y</span>=0.25</span><span class="l">    dot <span class="s">"Full redesign"</span> <span class="a">x</span>=0.85 <span class="a">y</span>=0.2</span></code></pre></figure><figure class="fig " id="fig-priorities" style="--w:412px"><img src="img/priorities.svg" width="412" height="360" alt="A quadrant with Effort on the horizontal axis and Impact on the vertical one, and four projects placed on it."><figcaption><b>Figure&nbsp;11.</b> Effort grows to the right and impact grows upward.</figcaption></figure></div><h3 id="inventory">Data table</h3><div class="plate"><p>The <code>datatable</code> macro: the first row is the header and the rest are data. An empty cell is written with quotes, <code>""</code>.</p><figure class="listing "><figcaption><span><b>Listing&nbsp;12.</b> <code>inventory.dg</code></span><button class="copy" type="button" data-src="import styles
+diagram inventory style=silberschatz
+  datatable
+    Product, Stock, Status
+    Green tea, 12, ok
+    Coffee, 0, sold out
+    Honey, 5, &quot;&quot;
+">Copy</button></figcaption><pre tabindex="0" role="region" aria-label="Listing 12"><code><span class="l"><span class="k">import</span> styles</span><span class="l">diagram inventory <span class="a">style</span>=silberschatz</span><span class="l">  <span class="k">datatable</span></span><span class="l">    Product, Stock, Status</span><span class="l">    Green tea, 12, ok</span><span class="l">    Coffee, 0, sold out</span><span class="l">    Honey, 5, <span class="s">""</span></span></code></pre></figure><figure class="fig " id="fig-inventory" style="--w:230px"><img src="img/inventory.svg" width="230" height="132" alt="An inventory table with the columns Product, Stock and Status and three rows; the last status cell is empty."><figcaption><b>Figure&nbsp;12.</b> A header and three rows of data; the last cell is empty.</figcaption></figure></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="usage">
+  <div class="wrap">
+    <h2>Usage</h2>
+    <div class="body">
+      <h3 style="margin-top:0">Build</h3>
+      <p>You need a C++17 compiler and Python&nbsp;3 (only to embed the libraries in the executable). To draw you also need <a href="https://github.com/arce/textod">textod</a>.</p>
+      <pre class="shell"><code>make            <span class="c"># builds build/macod</span>
+make test       <span class="c"># unit tests and the examples</span>
+make install    <span class="c"># installs into /usr/local/bin (PREFIX=... changes it)</span></code></pre>
+      <h3>Expand and draw</h3>
+      <pre class="shell"><code>macod diagram.dg | textod - -o diagram.svg
+macod diagram.dg -o plain.dg        <span class="c"># keeps the plain language</span>
+macod --libs                        <span class="c"># lists the built-in libraries</span></code></pre>
+      <table>
+        <thead><tr><th scope="col">Option</th><th scope="col">What it does</th></tr></thead>
+        <tbody>
+          <tr><td><code>INPUT</code></td><td>A <code>.dg</code> file, or <code>-</code> to read standard input.</td></tr>
+          <tr><td><code>-o OUTPUT</code></td><td>Output file; standard output by default.</td></tr>
+          <tr><td><code>-L DIR</code></td><td>Extra directory with libraries for <code>import</code>. Repeatable.</td></tr>
+          <tr><td><code>--libs</code></td><td>Lists the libraries built into the program.</td></tr>
+          <tr><td><code>-h</code>, <code>--version</code></td><td>Shows the help or the version.</td></tr>
+        </tbody>
+      </table>
+      <p>Libraries are searched in the directory of the input file, in the <code>-L</code> directories and, last, among the built-in ones. That is why you should not name your file like a library: a <code>kanban.dg</code> that runs <code>import kanban</code> would import itself.</p>
+      <p>The full language is described in <a href="https://github.com/arce/macod/blob/main/docs/DSL.md"><code>docs/DSL.md</code></a> and the plain language that macod writes, in <a href="https://github.com/arce/macod/blob/main/docs/plain-language.md"><code>docs/plain-language.md</code></a>.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>macod 0.1. It expands the full language into plain language; <a href="https://github.com/arce/textod">textod</a> draws it.</p>
+    <ul>
+      <li><a href="https://github.com/arce/macod">Code on GitHub</a></li>
+      <li><a href="https://github.com/arce/textod">textod</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('.copy').forEach(function (b) {
+  b.addEventListener('click', function () {
+    var done = function () { b.textContent = 'Copied'; setTimeout(function () { b.textContent = 'Copy'; }, 1800); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(b.dataset.src).then(done, function () { b.textContent = 'Could not copy'; });
+    } else { b.textContent = 'Could not copy'; }
+  });
+});
+</script>
+</body>
+</html>
