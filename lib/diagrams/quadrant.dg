@@ -3,7 +3,6 @@
 #   quadrant [w=400 h=300 xaxis="Effort" yaxis="Impact" q1="Quick wins" q2="Big bets" q3="Fill-ins" q4="Money pit"]
 #     dot "Name" x=0.3 y=0.8
 #   q1 is the top-right corner, q2 the top-left, q3 the bottom-left and q4 the bottom-right.
-import styles
 
 def quadrant w="400" h="300" xaxis="" yaxis="" q1="" q2="" q3="" q4=""
   col $id gap=4 align=center

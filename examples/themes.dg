@@ -1,0 +1,16 @@
+import rounded
+data looks name
+  github-light
+  nord-light
+  rose-pine-dawn
+  papercolor-light
+  solarized-light
+  monokai
+repeat looks
+  diagram $name style=rounded theme=$name caption="theme=$name"
+    row gap=44
+      box a "Client" light
+      box b "API" primary
+      box c "Store" yellow
+    a -> b label="HTTP"
+    b -> c

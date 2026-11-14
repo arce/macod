@@ -1,4 +1,4 @@
-import styles
+import rounded
 def person name role
   box $id w=130 align=center light
     text "$name" bold
@@ -11,7 +11,7 @@ data team name, role
   Paul, Data
   Sophie, Support
 
-diagram team style=oreilly
+diagram team style=rounded
   row gap=18
     repeat team
       person "$name" "$role"

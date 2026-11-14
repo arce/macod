@@ -1,5 +1,5 @@
-import styles
-diagram graph-crossings caption="graph orders each level to reduce crossings."
+import shadow
+diagram graph-crossings style=shadow caption="graph orders each level to reduce crossings."
   graph
     a "A" light
     b "B" light

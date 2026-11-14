@@ -16,7 +16,7 @@ Status: implemented in C++ (`*_tec.hpp`) and checked against the reference SVGs 
 
 ```
 import shapes
-diagram fig13-1 frame style=oreilly size=11 caption="Figure 13-1. Sharding in Redis"
+diagram fig13-1 frame style=rounded size=11 caption="Figure 13-1. Sharding in Redis"
   row gap=130
     ...
 screen cart "Cart" w=340
@@ -44,19 +44,23 @@ Colors are names from the theme (`light`, `blue`, `primary-soft`, ...) or `#rrgg
 
 ## 3b. Styles and fonts
 
-Styles are data, not code: a `style` block in a library gives default values per element type.
+Styles are data, not code: a `style` block in a library gives default values per element type. There is one file per style (`lib/styles/NAME.dg`), brought in with `import NAME`:
+
+| style | box | arrow |
+|---|---|---|
+| `boxed` | square corners, thin line | thin, italic |
+| `rounded` | rounded corners, thick line | thick |
+| `flat` | solid block, no outline | medium |
+| `shadow` | square, with a hard shadow | medium |
+| `rshadow` | rounded, with a hard shadow | medium |
+| `oval` | the box becomes an ellipse | medium |
 
 ```
-style oreilly
-  box radius=8 sw=1.6 padx=14 pady=8
-  arrow sw=2.5
-
-style silberschatz
-  box radius=0 sw=1.3 padx=8 pady=4
-  arrow sw=1.3
+import rounded
+diagram fig style=rounded
 ```
 
-- `style=oreilly` in the header selects it; styles can be stacked (`style=silberschatz,local`) and each layer overrides the one before. Priority: an attribute written on the element, then the style, then the built-in value.
+- `style=rounded` in the header selects it; styles can be stacked (`style=rounded,local`) and each layer overrides the one before. Priority: an attribute written on the element, then the style, then the built-in value.
 - A composite component (`def`) can set its own values and so override the style only inside its body.
 - Fonts: sans (Helvetica) by default or the `mono` flag; there is no `font=` attribute. Text is measured with the Helvetica table multiplied by a fixed factor (1.1 for `mono`, 1.07 for bold); the real typeface is not measured.
 
@@ -182,62 +186,29 @@ callout forgot@30% "Recovery" side=bottom         # anchor at 30 % of the side
 
 ### CSS themes (`theme=`)
 
-`diagram ... theme=balsamiq` (or `textod INPUT.dg -T balsamiq` for diagrams that do not carry it) embeds in the SVG the base color CSS (`c-f-*`, `c-s-*` with `--c-*` variables) and that of `balsamiq.css`, and puts the class `theme-balsamiq` on the `<svg>`. It works the same for wf and dg.
+A theme is a CSS file that changes the colors of a diagram. `diagram ... theme=nord-light` (or `textod INPUT.dg -T nord-light` for diagrams that do not carry it) embeds in the SVG the base color CSS (`c-f-*`, `c-s-*` with `--c-*` variables) and the one of the theme, and puts the class `theme-nord-light` on the `<svg>`. `macod` passes `theme=` through; it is `textod` that reads the sheet.
 
-- Several themes are separated by commas (`theme=balsamiq,print`): their sheets go in that order, the last one wins, and the root carries one class per theme. `lib/themes/print.css` is the gray palette for printing; it only redefines the `--c-*` variables, so it combines with any other theme. The default color palette lives in `THEME::PALETTE` (fallback values of `var(--c-name, …)`), so without a theme the SVG does not change.
+The themes that come with `textod` are five light ones and one dark one:
+
+| theme | look |
+|---|---|
+| `github-light` | white paper with the blue, green and red of github.com |
+| `nord-light` | cool pale gray with muted Nord accents |
+| `rose-pine-dawn` | warm pink-tinted paper with rose, gold and pine accents |
+| `papercolor-light` | neutral gray paper with saturated navy, green and red |
+| `solarized-light` | cream paper with the Solarized accents |
+| `monokai` | dark olive background with pink, orange, yellow, green and cyan |
+
+- Several themes are separated by commas (`theme=nord-light,monokai`): their sheets go in that order, the last one wins, and the root carries one class per theme. Without a theme the SVG does not change.
 - If several SVGs with different themes are inlined in one HTML page, the order between their sheets is decided by the document: to combine them safely, use `<img>` or one SVG per theme.
-- The theme is looked up like an `import`: `NAME.css` next to the file, in the `-L` directories or in the built-in libraries (`lib/themes/`). If it does not exist it is an error with the line.
-- A theme sheet is plain CSS: variables (`--c-primary`, `--c-font`…), rules per tag (`rect`, `text`, `line`, `path`, `polygon`, `ellipse`) and filters. All the rules hang from `.theme-NAME` so they do not affect the rest of the page when the SVG is inlined.
-- There are no per-component hooks: `def`s end up in those primitives and in the color classes, so a new component is already covered.
-- Example: `lib/themes/balsamiq.css` (Patrick Hand font, OFL license, embedded in base64; irregular stroke with an `feTurbulence` + `feDisplacementMap` filter) and `wf/theme-balsamiq.dg`. The CSS does not change the geometry: the width of the texts is still measured with Helvetica.
-
-## 8. Before and after
-
-A figure with containers (from `fig13-1.dg`), with no directives or coordinates:
-
-```
-import shapes
-diagram fig13-1 frame style=oreilly caption="Figure 13-1. Sharding in Redis using hash slots"
-  row gap=130
-    col gap=110
-      box ord "Order[OrderNum]" w=200 h=54 aligny=n0
-      box inv "Invoice[InvNum]" w=200 h=54 aligny=n2
-    group slots "Hash slots" pad=16 gap=10
-      row gap=26
-        box n0 "Node 0" w=120 h=50
-        db d0 "0-4095" w=90 h=62
-      row gap=26
-        box n1 "Node 1" w=120 h=50
-        db d1 "4096-\n8191" w=90 h=62
-      ...
-  ord.right -> slots.left@=n0 label="Hash (OrderNum)\nmod 16384" sw=8
-  n0 -> d0 sw=3
-  n1 -> d1 sw=3
-```
-
-A free-form figure (from `os/ch10-01.dg`), with containers instead of three `at=`:
-
-```
-import os
-diagram ch10-01 style=silberschatz size=11 caption="A file system: a collection of files and a directory structure."
-  col gap=46 align=center
-    box t "File\nSystem" light w=110 h=44
-    row gap=60
-      box a "Collection of\nfiles" light w=110 h=44 sw=2
-      box b "Directory\nstructure" light w=110 h=44 sw=2
-  t.bottom -> a.top elbow
-  t.bottom -> b.top elbow
-```
-
-A screen (from `wf/ui-shop.wf`): it does not change except for `diagram`/`screen` as the header and `w` instead of `width`.
-
-## 9. Migration of the current files
+- A theme sheet is plain CSS: it redefines the `--c-*` variables (`--c-primary`, `--c-surface`, `--c-canvas`, ...) under `.theme-NAME`, and `--c-canvas` paints the background of the figure. The CSS does not change the geometry: the width of the texts is still measured with Helvetica.
+- Any style works with any theme. See `examples/themes.dg` and `examples/looks.dg`.
 
 Done by `tools/conv.py` without touching the originals: `@frame`/`@style`/`@size`/`@caption` move to the `diagram` header; `width`/`height` to `w`/`h`; `box ... noborder` to `sw=0`; `none` to `fill=none`; `dashed` to `dash="6 4"`; uses of a `def` with a positional id move to `id=`; the dominant font sizes per file move to a `style local`. `tools/build.sh` converts, renders and compares with `tools/compare.py` (`python3 compare.py ch3-10` shows the differences of one file).
 
 ## 10. Pending
 
-- `silberschatz` is checked against 149 references; `oreilly` (`lib/styles.dg`) has no references and its values come from `diagram.js`.
+- The old styles `silberschatz` and `oreilly` are now `boxed` and `rounded` (`lib/styles/`).
 - Known difference: `ldx`/`ldy` (moving a label) were removed; `ch3-10` is the only file affected.
 - `alignx=` on a parent container is not supported (`fig2-8b`).
 - The wireframe `ui` library (§4) is missing: `wf/` has not been tried yet.

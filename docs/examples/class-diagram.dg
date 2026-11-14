@@ -1,5 +1,6 @@
+import boxed
 import uml
-diagram class-diagram style=silberschatz
+diagram class-diagram style=boxed
   graph node=cls gap=60
     Animal "Animal" attrs="+name: String\n+age: int" ops="+eat()\n+sleep()"
     Animal -> tip=none tail=hollow Dog "Dog" attrs="+breed: String" ops="+bark()"

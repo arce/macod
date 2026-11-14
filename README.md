@@ -13,6 +13,7 @@ Website: <https://arce.github.io/macod/> (the page in [docs/index.html](docs/ind
 - `def` (components with parameters and `content`), `data`, `repeat`, `if`, `include`.
 - `import` of libraries that contain `def` (wireframe components, UML, ER, state, kanban, timeline, ...).
 - Embedded screens (`screen id=`) and links (`-> destination`), CSV tables.
+- The six styles of `textod` as libraries (`import rounded`; also `boxed`, `flat`, `shadow`, `rshadow`, `oval`). Themes (`theme=NAME`: five light ones and Monokai, dark) go through to `textod`, which reads their CSS.
 - The modules `graph`, `tree`, `sequence`, `datatable` and `form`.
 
 Everything is expanded away: the output has only plain-language vocabulary, no `def`, `data`, `repeat`, `if`, `content`, `include` or modules.

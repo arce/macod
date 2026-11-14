@@ -4,7 +4,6 @@
 #     Customer "Customer" keys="id\nname"
 #     Customer -> tip=none "1..*" Order "Order" keys="id\ndate"
 #   an entity has a title and a list of attributes (keys="a\nb").
-import styles
 
 def entity title keys="" w=""
   col $id gap=0 align=stretch w=$w

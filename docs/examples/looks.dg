@@ -1,0 +1,20 @@
+import boxed
+import rounded
+import flat
+import shadow
+import rshadow
+import oval
+data looks name
+  boxed
+  rounded
+  flat
+  shadow
+  rshadow
+  oval
+repeat looks
+  diagram $name style=$name caption="style=$name"
+    row gap=44
+      box a "Client" light
+      box b "API" green
+      box c "Store" yellow
+    a -> b -> c

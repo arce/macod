@@ -9,7 +9,6 @@
 #     Reader -> dash="6 4" Book                        dependency
 #
 #   cls "Title" [attrs="a\nb" ops="c\nd" w=]  (a class with up to three compartments; id= names it outside graph)
-import styles
 
 def cls title attrs="" ops="" w="" abstract
   col $id gap=0 align=stretch w=$w

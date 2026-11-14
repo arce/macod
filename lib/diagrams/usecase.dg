@@ -3,7 +3,6 @@
 #   graph node=uc direction=right gap=90
 #     cli "Customer" kind=actor
 #     cli -> tip=none buy "Buy a ticket"
-import styles
 
 def uc title kind=""
   if kind is actor

@@ -1,5 +1,5 @@
-import styles
-diagram empty-cell (
+import boxed
+diagram empty-cell style=boxed (
     caption="datatable: an empty cell is written with quotes."
 )
   datatable

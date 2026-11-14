@@ -1,5 +1,5 @@
-import styles
-diagram tree-horizontal caption="tree direction=right"
+import boxed
+diagram tree-horizontal style=boxed caption="tree direction=right"
   tree direction=right
     root "System" light
       a "Documents"

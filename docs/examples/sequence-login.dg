@@ -1,5 +1,5 @@
-import styles
-diagram sequence-login style=oreilly
+import rounded
+diagram sequence-login style=rounded
   sequence
     u "User"
     s "Server"

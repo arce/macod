@@ -7,7 +7,6 @@
 #     ini -> idle
 #     idle -> "start" running "Running"
 #     running -> "stop" fin
-import styles
 
 def st title kind=""
   if kind is start

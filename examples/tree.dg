@@ -1,5 +1,5 @@
-import styles
-diagram tree caption="tree: the hierarchy comes from the indentation."
+import rounded
+diagram tree style=rounded caption="tree: the hierarchy comes from the indentation."
   tree
     root "System" light
       a "Documents"

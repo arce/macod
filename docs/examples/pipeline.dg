@@ -1,4 +1,4 @@
-import styles
-diagram pipeline style=oreilly
+import rounded
+diagram pipeline style=rounded
   graph direction=right gap=40
     a "You write\nthe .dg" light -> b "macod" -> c "Plain\nlanguage" -> d "SVG" light

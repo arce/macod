@@ -1,5 +1,6 @@
+import rounded
 import state
-diagram state-machine style=oreilly
+diagram state-machine style=rounded
   graph node=st direction=right gap=170
     start "" kind=start
     end "" kind=end

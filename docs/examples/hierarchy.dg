@@ -1,5 +1,5 @@
-import styles
-diagram hierarchy style=oreilly
+import rounded
+diagram hierarchy style=rounded theme=nord-light
   tree
     ceo "Management" light
       tec "Technology"

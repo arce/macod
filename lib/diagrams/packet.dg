@@ -3,7 +3,6 @@
 #   packet
 #     bits                              (a row of fields; 32 bits = 384 pt)
 #       field "Source port" 16
-import styles
 
 def packet
   col $id gap=0 align=start

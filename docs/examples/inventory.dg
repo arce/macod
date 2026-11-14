@@ -1,5 +1,5 @@
-import styles
-diagram inventory style=silberschatz
+import boxed
+diagram inventory style=boxed
   datatable
     Product, Stock, Status
     Green tea, 12, ok
