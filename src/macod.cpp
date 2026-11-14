@@ -2,7 +2,6 @@
 // graph, tree, sequence, datatable and form, embedded screens and links) and writes the plain
 // language that textod draws:  macod INPUT.dg | textod -
 #include "cli_common.hpp"
-#include "embedded_lib.hpp"
 #include "macros_tec.hpp"
 
 using namespace std;
@@ -15,22 +14,23 @@ static void usage(ostream& o) {
     << "  INPUT       a .dg file, or - to read standard input\n"
     << "  -o OUTPUT   output file; standard output by default (- also works)\n"
     << "  -L DIR      extra directory with libraries (import); repeatable\n"
-    << "  --libs      list the libraries built into the program\n"
+    << "  --libs      list the libraries that are found\n"
     << "  -h, --help  this help      --version  version\n"
     << "It writes the plain language: it expands the macros and the modules"
     << ". It is drawn with textod:\n"
     << "  " << PROGRAM << " INPUT.dg | textod - -o OUTPUT.svg\n"
-    << "Libraries are searched in: the input file's directory, the -L directories and the built-in ones.\n";
+    << "Libraries are files, searched in: the input file's directory, the -L directories and the lib/ next to " << PROGRAM << " (or ../lib, ../share/" << PROGRAM << ").\n";
 }
 
 int main(int argc, char** argv) {
   string in, out;
   vector<string> dirs;
+  bool libs = false;
   for (int i = 1; i < argc; i++) {
     string a = argv[i];
     if (a == "-h" || a == "--help") { usage(cout); return 0; }
     if (a == "--version") { cout << PROGRAM << " " << VERSION << "\n"; return 0; }
-    if (a == "--libs") { for (auto& l : EMBEDDED) cout << l.first << "\n"; return 0; }
+    if (a == "--libs") { libs = true; continue; }
     if ((a == "-o" || a == "-L") && i + 1 >= argc) { cerr << PROGRAM << ": missing value for " << a << "\n"; return 2; }
     if (a == "-o") out = argv[++i];
     else if (a == "-L") dirs.push_back(argv[++i]);
@@ -38,12 +38,16 @@ int main(int argc, char** argv) {
     else if (in.empty()) in = a;
     else { cerr << PROGRAM << ": only one input file is accepted\n"; return 2; }
   }
+  // the libraries that travel with the program: lib/ next to the executable or in its parent (the repository), or share/macod (installed)
+  string exe = cli::exeDir();
+  if (!exe.empty()) for (const char* rel : {"/lib", "/../lib", "/../share/" PROGRAM}) dirs.push_back(exe + rel);
+  if (libs) { for (auto& n : cli::libraries(dirs)) cout << n << "\n"; return 0; }
   if (in.empty()) { usage(cerr); return 2; }
   string src;
   if (in == "-") src.assign(istreambuf_iterator<char>(cin), istreambuf_iterator<char>());
   else if (!read(in, src)) { cerr << PROGRAM << ": cannot read " << in << "\n"; return 1; }
   dirs.insert(dirs.begin(), in == "-" ? "." : cli::dirOf(in));
-  DSL::Resolver res = cli::resolver(dirs, EMBEDDED);
+  DSL::Resolver res = cli::resolver(dirs);
   string text;
   try {
     text = DSL::emit(DSL::compile(src, res));

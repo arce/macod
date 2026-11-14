@@ -45,10 +45,10 @@ macod INPUT.dg [-o OUTPUT.dg] [-L DIR]...
 | `INPUT` | a `.dg` file, or `-` for standard input |
 | `-o OUTPUT` | output file; standard output by default (`-` also works) |
 | `-L DIR` | extra directory with libraries for `import`; repeatable |
-| `--libs` | list the libraries built into the program |
+| `--libs` | list the libraries that are found |
 | `-h`, `--help` / `--version` | help / version |
 
-Libraries are searched in: the input file's directory, the `-L` directories, then the built-in ones. Do not name your file like a library: a `kanban.dg` that runs `import kanban` would import itself.
+Libraries are files, searched in: the input file's directory, the `-L` directories, then the ones that travel with the program: `lib/` and `../lib` next to the executable, and `../share/macod` (where `make install` puts them, in subdirectories too). A file of your own with the same name wins. Another program can add libraries by installing them under `share/macod/`. Do not name your file like a library: a `kanban.dg` that runs `import kanban` would import itself.
 
 `macod` checks the macros and modules; it does not check the drawing vocabulary. An unknown element goes through and `textod` reports it, with the line of your file.
 
@@ -73,11 +73,11 @@ Libraries are searched in: the input file's directory, the `-L` directories, the
 ```
 make            # builds build/macod
 make test       # unit tests and the examples
-make install    # installs into /usr/local/bin (PREFIX=... to change it)
+make install    # /usr/local/bin/macod and the libraries in /usr/local/share/macod (PREFIX=... to change it)
 make clean      # removes build/
 ```
 
-The program name is set with `-DPROGRAM`. It embeds the libraries for macros and components. Requires a C++17 compiler and Python 3 (only to embed the libraries).
+The program name is set with `-DPROGRAM`. Requires a C++17 compiler. The libraries (`lib/`) are files that `macod` reads when it runs, so one can be added or changed without compiling: it looks for them next to the executable (`lib/` or `../lib`, so `build/macod` finds the ones of this repository from any directory) and in `share/macod` (where `make install` puts them, `PREFIX/share/macod`).
 
 `macod` uses only the C++ standard library: it does not contain or link any `textod` code. `textod` is a separate program that reads the text `macod` writes.
 
