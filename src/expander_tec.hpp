@@ -15,7 +15,7 @@ class Expander {
   std::string prefix;
 
   static int num(const std::string& s) {
-    if (s.empty() || s.size() > 4) return -1;
+    if (s.empty() || s.size() > 9) return -1;
     int r = 0;
     for (char c : s) {
       if (c < '0' || c > '9') return -1;
@@ -112,7 +112,7 @@ class Expander {
       d = &it->second;
     } else if (!n.has("n")) throw Error(ln, "repeat: give a data name or n=");
     int count = n.has("n") ? num(sub(n.attr("n"), v)) : (int)d->kids.size();
-    if (count < 0 || count > 200) throw Error(ln, "repeat: n must be between 0 and 200");
+    if (count < 0) throw Error(ln, "repeat: n must be a whole number, 0 or more");
     std::string var = n.attr("var", "i");
     for (int i = 0; i < count; i++) {
       Vars s = v;

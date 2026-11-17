@@ -75,7 +75,10 @@ int main() {
   EQ(err("x\nimport bad", lib), string("line 2: library 'bad', line 3: only 'def' and 'import' go in a library"));
   EQ(err("repeat prod\n  x", lib), string("line 1: repeat: there is no data named 'prod'"));
   EQ(err("data product a\nrepeat produt\n  x"), string("line 2: repeat: there is no data named 'produt' (did you mean 'product'?)"));
-  EQ(err("repeat n=999\n  x"), string("line 1: repeat: n must be between 0 and 200"));
+  EQ(err("repeat n=-1\n  x"), string("line 1: repeat: n must be a whole number, 0 or more"));
+  EQ(DSL::show(DSL::compile("repeat n=1000\n  x")).size(), (size_t)2000);
+  EQ(err("repeat n=abc\n  x"), string("line 1: repeat: n must be a whole number, 0 or more"));
+  EQ(err("repeat n=60000\n  x"), string("line 2: the expansion is too large"));
   EQ(err("repeat\n  x"), string("line 1: repeat: give a data name or n="));
   EQ(err("def a\n  a\na"), string("line 3: the components nest too deep"));
   EQ(err("def a x\n  t\na 1 2"), string("line 3: 'a' takes 1 parameter(s), no more"));
